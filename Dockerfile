@@ -6,7 +6,7 @@
 ###############################################################################
 
 # ---- Stage 1: build the Next.js app with Node ----
-FROM node:20-slim AS build
+FROM node:22-slim AS build
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY package*.json ./
@@ -30,7 +30,7 @@ WORKDIR /app
 # cis-bench requires Python >=3.12, which this base provides.
 RUN apt-get update \
  && apt-get install -y --no-install-recommends curl ca-certificates gnupg libxml2 libxslt1.1 \
- && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+ && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
  && apt-get install -y --no-install-recommends nodejs \
  && pip install --no-cache-dir --break-system-packages "cis-bench==0.5.2" \
  && apt-get purge -y curl gnupg && apt-get autoremove -y \
