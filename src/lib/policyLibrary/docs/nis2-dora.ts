@@ -337,5 +337,334 @@ export const NIS2_DORA_DOCS: LibraryDoc[] = [
     },
   },
 
+  // ───────────────────────── SH-NIS-003 ─────────────────────────
+  {
+    docId: "SH-NIS-003",
+    type: "register",
+    references: [
+      "NIS2 Directive (EU) 2022/2555 Art. 20",
+      "NIS2 Directive (EU) 2022/2555 Art. 21(1)",
+      "NIS2 Directive (EU) 2022/2555 Art. 21(2)(a) to (j)",
+      "NIS2 Directive (EU) 2022/2555 Art. 21(3)",
+      "NIS2 Directive (EU) 2022/2555 Art. 23",
+    ],
+    en: {
+      title: "NIS2 Compliance Self-Assessment",
+      summary: "Self-assessment register with one row for each NIS2 risk-management measure in Art. 21(2)(a) to (j), management accountability, supply chain and reporting, tracking status, gaps, actions and owners.",
+      body: [
+        h1("1. Purpose"),
+        p("This register lets the organization assess how well it meets the cybersecurity risk-management and reporting requirements of Directive (EU) 2022/2555 (NIS2), record the evidence behind each answer, and track gaps to closure."),
+        h1("2. Scope"),
+        p("The register covers Art. 20 (management body), the ten minimum measures in Art. 21(2)(a) to (j), the supply chain considerations in Art. 21(3) and the reporting obligations in Art. 23. It applies to the network and information systems the organization uses to provide its services. National requirements added by the transposing law should be added as extra rows."),
+        h1("3. How to use this register"),
+        step("For each row, read the requirement and the description, and decide how far the organization meets it today."),
+        step("Name the policy, procedure, record or technical control that proves it in the Evidence column. If no evidence exists, the requirement is not met."),
+        step("Select a status from the legend below and describe any gap in plain words."),
+        step("For every gap, record the action, an individual owner and a due date. Track actions to closure."),
+        step("Complete the assessment at least once a year, and after any significant incident or change. Present the result to the management body (SH-NIS-002)."),
+        h1("4. Status legend"),
+        table(
+          ["Status", "Meaning"],
+          [
+            ["Implemented", "The measure is in place, documented, operating and supported by current evidence"],
+            ["Partially implemented", "The measure exists but is incomplete, undocumented, not applied everywhere or lacks evidence"],
+            ["Planned", "The measure is not in place, but an approved action with owner and date exists"],
+            ["Not implemented", "No measure exists and no action has been approved"],
+            ["Not applicable", "The requirement does not apply; the reason shall be written in the Gap column and approved by the Security Lead"],
+          ]
+        ),
+        h1("5. Self-assessment"),
+        table(
+          ["Requirement", "Description", "Evidence / implementing document", "Status", "Gap", "Action", "Owner", "Due date"],
+          [
+            ["Art. 20 Management body", "The management body approves the risk-management measures, oversees their implementation, can be held liable for infringements and follows cybersecurity training, with similar training offered regularly to employees.", "Management Body Cybersecurity Accountability and Training (SH-NIS-002); minutes; training records", "", "", "", "", ""],
+            ["Art. 21(2)(a) Risk analysis and information system security policies", "Policies and a repeatable method to identify, rate and treat cybersecurity risks and to set security rules for systems.", "Information Security Risk Register (SH-REG-001); Information Asset Inventory (SH-REG-002); [information security policy]", "", "", "", "", ""],
+            ["Art. 21(2)(b) Incident handling", "Ability to detect, assess, contain, respond to and recover from incidents, with defined roles and escalation.", "NIS2 Incident Notification Procedure (SH-NIS-001); [incident response procedure]", "", "", "", "", ""],
+            ["Art. 21(2)(c) Business continuity, backup, disaster recovery and crisis management", "Plans and tested capability to keep or restore services after disruption, including backup management and crisis handling.", "Backup and Restore Testing Procedure (SH-PRC-004); [business continuity and disaster recovery plans]", "", "", "", "", ""],
+            ["Art. 21(2)(d) Supply chain security", "Security of the relationships with direct suppliers and service providers, including assessment, contract terms and monitoring.", "Supplier Security Assessment Procedure (SH-PRC-005); [supplier register]", "", "", "", "", ""],
+            ["Art. 21(2)(e) Security in acquisition, development and maintenance, including vulnerability handling and disclosure", "Security requirements when acquiring, building and maintaining systems, with vulnerability management and a way to handle reported vulnerabilities.", "Vulnerability Management Procedure (SH-PRC-003); [secure development and change management procedures]", "", "", "", "", ""],
+            ["Art. 21(2)(f) Assessing the effectiveness of measures", "Policies and procedures to test and measure whether the cybersecurity measures work, such as audits, tests and metrics.", "[internal audit programme]; [security metrics reports]; [penetration test reports]", "", "", "", "", ""],
+            ["Art. 21(2)(g) Basic cyber hygiene and cybersecurity training", "Baseline hygiene practices such as patching, secure configuration and malware protection, and awareness training for all staff.", "[security awareness programme]; training records (SH-NIS-002 section 4.7); [secure configuration baselines]", "", "", "", "", ""],
+            ["Art. 21(2)(h) Cryptography and, where appropriate, encryption", "Rules on when and how cryptography and encryption are used, including key management.", "[cryptography and key management policy]", "", "", "", "", ""],
+            ["Art. 21(2)(i) Human resources security, access control and asset management", "Security in the employee lifecycle, access granted on need to know and reviewed, and a maintained inventory of assets.", "Information Asset Inventory (SH-REG-002); [access control policy]; [HR security procedure]", "", "", "", "", ""],
+            ["Art. 21(2)(j) Multi-factor authentication, secured communications and emergency communication", "Use of multi-factor or continuous authentication, secured voice, video and text communications and secured emergency communication systems where appropriate.", "[authentication standard]; [secure communications standard]; [crisis communication plan]", "", "", "", "", ""],
+            ["Art. 21(3) Supply chain considerations", "When assessing supplier measures, the organization takes into account each direct supplier's specific vulnerabilities, the overall quality of its products and cybersecurity practices, including secure development, and the results of any coordinated supply chain risk assessments.", "Supplier Security Assessment Procedure (SH-PRC-005); supplier assessment records", "", "", "", "", ""],
+            ["Art. 23 Reporting obligations", "Significant incidents are notified to the competent authority or CSIRT with an early warning in 24 hours, a notification in 72 hours and a final report within one month, and service recipients are informed where appropriate.", "NIS2 Incident Notification Procedure (SH-NIS-001); notification exercise records", "", "", "", "", ""],
+            ...blank(3, 8),
+          ]
+        ),
+        h1("6. Review"),
+        p("The Security Lead shall review the completed self-assessment with the owners at least once a year and after any significant incident, report the results and open actions to the management body, and keep each version as evidence of the review."),
+      ],
+    },
+    es: {
+      title: "Autoevaluación de Cumplimiento NIS2",
+      summary: "Registro de autoevaluación con una fila por cada medida de gestión de riesgos del artículo 21, apartado 2, letras a) a j) de NIS2, la responsabilidad de la dirección, la cadena de suministro y la notificación.",
+      body: [
+        h1("1. Propósito"),
+        p("Este registro permite a la organización evaluar en qué medida cumple los requisitos de gestión de riesgos de ciberseguridad y de notificación de la Directiva (UE) 2022/2555 (NIS2), registrar las evidencias de cada respuesta y seguir las brechas hasta su cierre."),
+        h1("2. Alcance"),
+        p("El registro abarca el artículo 20 (órgano de dirección), las diez medidas mínimas del artículo 21, apartado 2, letras a) a j), las consideraciones sobre la cadena de suministro del artículo 21, apartado 3, y las obligaciones de notificación del artículo 23. Se aplica a las redes y sistemas de información que la organización utiliza para prestar sus servicios. Los requisitos nacionales añadidos por la ley de transposición deberán incorporarse como filas adicionales."),
+        h1("3. Cómo utilizar este registro"),
+        step("En cada fila, lea el requisito y la descripción y decida en qué medida lo cumple hoy la organización."),
+        step("Indique en la columna de evidencia la política, el procedimiento, el registro o el control técnico que lo demuestra. Si no existe evidencia, el requisito no se cumple."),
+        step("Seleccione un estado de la leyenda siguiente y describa cualquier brecha con palabras sencillas."),
+        step("Para cada brecha, registre la acción, un responsable individual y una fecha límite. Haga el seguimiento de las acciones hasta su cierre."),
+        step("Complete la evaluación al menos una vez al año y tras cualquier incidente o cambio significativo. Presente el resultado al órgano de dirección (SH-NIS-002)."),
+        h1("4. Leyenda de estados"),
+        table(
+          ["Estado", "Significado"],
+          [
+            ["Implantada", "La medida está implantada, documentada, en funcionamiento y respaldada por evidencias actuales"],
+            ["Parcialmente implantada", "La medida existe, pero está incompleta, no documentada, no se aplica en todas partes o carece de evidencias"],
+            ["Planificada", "La medida no está implantada, pero existe una acción aprobada con responsable y fecha"],
+            ["No implantada", "No existe medida ni se ha aprobado ninguna acción"],
+            ["No aplicable", "El requisito no se aplica; el motivo deberá escribirse en la columna Brecha y ser aprobado por el Responsable de Seguridad"],
+          ]
+        ),
+        h1("5. Autoevaluación"),
+        table(
+          ["Requisito", "Descripción", "Evidencia / documento que lo implementa", "Estado", "Brecha", "Acción", "Responsable", "Fecha límite"],
+          [
+            ["Art. 20 Órgano de dirección", "El órgano de dirección aprueba las medidas de gestión de riesgos, supervisa su aplicación, puede ser considerado responsable de las infracciones y sigue formación en ciberseguridad, ofreciéndose formación similar con regularidad a los empleados.", "Responsabilidad y Formación en Ciberseguridad del Órgano de Dirección (SH-NIS-002); actas; registros de formación", "", "", "", "", ""],
+            ["Art. 21(2)(a) Políticas de análisis de riesgos y de seguridad de los sistemas de información", "Políticas y un método repetible para identificar, valorar y tratar los riesgos de ciberseguridad y fijar las reglas de seguridad de los sistemas.", "Registro de Riesgos de Seguridad de la Información (SH-REG-001); Inventario de Activos de Información (SH-REG-002); [política de seguridad de la información]", "", "", "", "", ""],
+            ["Art. 21(2)(b) Gestión de incidentes", "Capacidad para detectar, evaluar, contener, responder y recuperarse de los incidentes, con roles y escalado definidos.", "Procedimiento de Notificación de Incidentes NIS2 (SH-NIS-001); [procedimiento de respuesta a incidentes]", "", "", "", "", ""],
+            ["Art. 21(2)(c) Continuidad de negocio, copias de seguridad, recuperación ante desastres y gestión de crisis", "Planes y capacidad probada para mantener o restablecer los servicios tras una interrupción, incluida la gestión de copias de seguridad y de crisis.", "Procedimiento de Copias de Seguridad y Pruebas de Restauración (SH-PRC-004); [planes de continuidad de negocio y recuperación ante desastres]", "", "", "", "", ""],
+            ["Art. 21(2)(d) Seguridad de la cadena de suministro", "Seguridad de las relaciones con proveedores directos y prestadores de servicios, incluidas la evaluación, las condiciones contractuales y el seguimiento.", "Procedimiento de Evaluación de Seguridad de Proveedores (SH-PRC-005); [registro de proveedores]", "", "", "", "", ""],
+            ["Art. 21(2)(e) Seguridad en la adquisición, el desarrollo y el mantenimiento, incluidas la gestión y la divulgación de vulnerabilidades", "Requisitos de seguridad al adquirir, construir y mantener sistemas, con gestión de vulnerabilidades y un modo de tratar las vulnerabilidades comunicadas.", "Procedimiento de Gestión de Vulnerabilidades (SH-PRC-003); [procedimientos de desarrollo seguro y de gestión de cambios]", "", "", "", "", ""],
+            ["Art. 21(2)(f) Evaluación de la eficacia de las medidas", "Políticas y procedimientos para probar y medir si las medidas de ciberseguridad funcionan, como auditorías, pruebas y métricas.", "[programa de auditoría interna]; [informes de métricas de seguridad]; [informes de pruebas de intrusión]", "", "", "", "", ""],
+            ["Art. 21(2)(g) Prácticas básicas de ciberhigiene y formación en ciberseguridad", "Prácticas básicas de higiene, como la aplicación de parches, la configuración segura y la protección frente a malware, y formación de concienciación para todo el personal.", "[programa de concienciación en seguridad]; registros de formación (SH-NIS-002, apartado 4.7); [líneas base de configuración segura]", "", "", "", "", ""],
+            ["Art. 21(2)(h) Criptografía y, en su caso, cifrado", "Reglas sobre cuándo y cómo se utilizan la criptografía y el cifrado, incluida la gestión de claves.", "[política de criptografía y gestión de claves]", "", "", "", "", ""],
+            ["Art. 21(2)(i) Seguridad de los recursos humanos, control de acceso y gestión de activos", "Seguridad en el ciclo de vida del empleado, accesos concedidos según la necesidad de conocer y revisados, y un inventario de activos actualizado.", "Inventario de Activos de Información (SH-REG-002); [política de control de accesos]; [procedimiento de seguridad de RR. HH.]", "", "", "", "", ""],
+            ["Art. 21(2)(j) Autenticación multifactor, comunicaciones seguras y comunicaciones de emergencia", "Uso de autenticación multifactor o continua, comunicaciones de voz, vídeo y texto seguras y sistemas seguros de comunicación de emergencia cuando proceda.", "[estándar de autenticación]; [estándar de comunicaciones seguras]; [plan de comunicación de crisis]", "", "", "", "", ""],
+            ["Art. 21(3) Consideraciones sobre la cadena de suministro", "Al evaluar las medidas de los proveedores, la organización tiene en cuenta las vulnerabilidades específicas de cada proveedor directo, la calidad global de sus productos y sus prácticas de ciberseguridad, incluido el desarrollo seguro, y los resultados de las evaluaciones coordinadas de riesgos de la cadena de suministro.", "Procedimiento de Evaluación de Seguridad de Proveedores (SH-PRC-005); registros de evaluación de proveedores", "", "", "", "", ""],
+            ["Art. 23 Obligaciones de notificación", "Los incidentes significativos se notifican a la autoridad competente o al CSIRT con una alerta temprana en 24 horas, una notificación en 72 horas y un informe final en un mes, y se informa a los destinatarios de los servicios cuando proceda.", "Procedimiento de Notificación de Incidentes NIS2 (SH-NIS-001); registros de ejercicios de notificación", "", "", "", "", ""],
+            ...blank(3, 8),
+          ]
+        ),
+        h1("6. Revisión"),
+        p("El Responsable de Seguridad deberá revisar la autoevaluación completada con los responsables al menos una vez al año y tras cualquier incidente significativo, informar al órgano de dirección de los resultados y las acciones abiertas, y conservar cada versión como evidencia de la revisión."),
+      ],
+    },
+  },
+
+  // ───────────────────────── SH-DOR-001 ─────────────────────────
+  {
+    docId: "SH-DOR-001",
+    type: "template",
+    references: [
+      "DORA Regulation (EU) 2022/2554 Art. 5",
+      "DORA Regulation (EU) 2022/2554 Art. 6",
+      "DORA Regulation (EU) 2022/2554 Art. 7",
+      "DORA Regulation (EU) 2022/2554 Art. 8",
+      "DORA Regulation (EU) 2022/2554 Art. 9",
+      "DORA Regulation (EU) 2022/2554 Art. 10",
+      "DORA Regulation (EU) 2022/2554 Art. 11",
+      "DORA Regulation (EU) 2022/2554 Art. 12",
+      "DORA Regulation (EU) 2022/2554 Art. 13",
+      "DORA Regulation (EU) 2022/2554 Art. 14",
+    ],
+    en: {
+      title: "ICT Risk Management Framework",
+      summary: "Guided template for the ICT risk management framework required of financial entities under DORA, covering governance, identification, protection, detection, response, backup, learning and communication.",
+      body: [
+        h1("1. Purpose"),
+        p("This framework describes how the organization manages ICT risk so that it can keep a high level of digital operational resilience, as required by Regulation (EU) 2022/2554 (DORA), Chapter II."),
+        p("[Guidance: keep or adapt the paragraph above. Add the organization's strategic reasons for resilience, such as customer commitments and the services that depend on ICT.]"),
+        h1("2. Scope"),
+        p("This framework applies to all ICT systems, assets, services and data used by the organization, including those provided by ICT third-party service providers, and to all personnel and functions that use or manage them."),
+        p("[Guidance: list the legal entities, business lines, locations and platforms in scope, and any exclusions with reasons.]"),
+        table(
+          ["In scope item", "Description", "Owner"],
+          [["[Business function or service]", "[Short description]", "[Name]"], ["", "", ""], ["", "", ""], ["", "", ""]]
+        ),
+        h1("3. Governance and management body responsibility (Art. 5)"),
+        p("The management body shall define, approve, oversee and be accountable for the implementation of all arrangements related to the ICT risk management framework."),
+        p("[Guidance: describe how the management body does this in practice. State who sets the digital operational resilience strategy, which risk tolerance and impact tolerance levels it approves, how often it reviews ICT risk, and how it approves the budget.]"),
+        p("The management body shall keep its knowledge of ICT risk up to date, including through regular training, and shall review ICT risk reports at least [quarterly]."),
+        p("[Guidance: name the committee or meeting where ICT risk is reviewed, and attach the training plan for management body members.]"),
+        h2("3.1 Roles and responsibilities"),
+        table(
+          ["Role", "Name / position", "Responsibilities"],
+          [
+            ["Management body", "[Board or equivalent]", "Approves framework, strategy, tolerance levels and budget; oversees implementation"],
+            ["Function responsible for ICT risk management and control", "[Name or position]", "Manages and oversees ICT risk with enough independence to avoid conflicts of interest"],
+            ["ICT operations", "[Name or position]", "Operates and secures ICT systems; carries out the controls"],
+            ["Internal audit", "[Name or position]", "Reviews the framework independently"],
+            ["Third-party risk lead", "[Name or position]", "Manages ICT third-party risk and the register of information"],
+            ["Incident manager", "[Name or position]", "Runs ICT-related incident management and reporting"],
+          ]
+        ),
+        p("[Guidance: show how the framework separates the control function that manages ICT risk, the ICT operations that carry it out and the independent assurance given by internal audit.]"),
+        h1("4. The ICT risk management framework (Arts. 6 and 7)"),
+        p("The organization maintains a documented framework with the strategies, policies, procedures, ICT protocols and tools needed to protect its information and ICT assets and to manage ICT risk quickly, efficiently and comprehensively."),
+        p("[Guidance: list the documents that make up the framework, with their owners and review dates, in the table. Describe the digital operational resilience strategy and the objectives that follow from it.]"),
+        table(
+          ["Framework document", "Purpose", "Owner", "Last review", "Next review"],
+          [["[Document name]", "[What it covers]", "[Name]", "[Date]", "[Date]"], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""]]
+        ),
+        p("The organization shall use and maintain up-to-date ICT systems, protocols and tools that suit its needs, are reliable, have sufficient capacity and are technologically resilient (Art. 7)."),
+        p("The framework shall be reviewed at least once a year and after major ICT-related incidents, and shall be improved on the basis of lessons learned, supervisory findings and testing results. It shall be subject to independent internal audit."),
+        h1("5. Identification (Art. 8)"),
+        p("The organization shall identify, classify and document its ICT-supported business functions, the roles and responsibilities, the information assets and ICT assets that support them, and their dependencies, including on ICT third-party service providers."),
+        p("[Guidance: state where the inventory is kept, who maintains it and how often it is updated, at least yearly. Define the classification of functions as critical or important, and how legacy systems are assessed.]"),
+        table(
+          ["Business function", "Critical or important (Y/N)", "Supporting ICT assets", "Information assets", "Dependencies and third parties", "Owner"],
+          [["[Function]", "[Y/N]", "[Assets]", "[Data]", "[Providers]", "[Name]"], ["", "", "", "", "", ""], ["", "", "", "", "", ""], ["", "", "", "", "", ""]]
+        ),
+        p("The organization shall identify all sources of ICT risk, including exposures to and from other financial entities, shall assess cyber threats and vulnerabilities relevant to its assets, and shall carry out an ICT risk assessment on every major change in network and information system infrastructure."),
+        p("[Guidance: describe the risk assessment method, the frequency and where the results are recorded.]"),
+        h1("6. Protection and prevention (Art. 9)"),
+        p("The organization shall continuously monitor and control the security and functioning of its ICT systems and shall use ICT security tools, policies and procedures that minimise the impact of ICT risk."),
+        p("[Guidance: summarise the controls in each area and reference the detailed documents.]"),
+        table(
+          ["Control area", "Minimum requirement", "Reference document", "Owner"],
+          [
+            ["Network security", "Segmentation, filtering, secured connections, closed down unused ports", "[Document]", "[Name]"],
+            ["Access management", "Least privilege, strong authentication, periodic access review", "[Document]", "[Name]"],
+            ["Encryption and cryptography", "Protection of data at rest, in transit and in use according to classification; key management", "[Document]", "[Name]"],
+            ["Patch and change management", "Documented, tested and approved changes; timely patches", "[Document]", "[Name]"],
+            ["Data and system integrity", "Protection against loss, corruption and unauthorized access", "[Document]", "[Name]"],
+            ["Secure development and acquisition", "Security requirements built into acquisition and development", "[Document]", "[Name]"],
+          ]
+        ),
+        h1("7. Detection (Art. 10)"),
+        p("The organization shall have mechanisms to promptly detect anomalous activities, including network performance issues and ICT-related incidents, and to identify potential material single points of failure."),
+        p("[Guidance: describe monitoring tools, log sources, alert thresholds, the criteria that trigger incident response processes, and who reviews alerts and how often.]"),
+        table(
+          ["Detection mechanism", "What it monitors", "Alert criteria", "Reviewed by", "Frequency"],
+          [["[Tool or process]", "[Systems or events]", "[Threshold]", "[Role]", "[Continuous or interval]"], ["", "", "", "", ""], ["", "", "", "", ""]]
+        ),
+        h1("8. Response and recovery (Art. 11)"),
+        p("The organization shall maintain a comprehensive ICT business continuity policy and ICT response and recovery plans, which shall be tested at least once a year and after substantive changes."),
+        p("[Guidance: state recovery time and recovery point objectives for each critical or important function, who may activate the plans, and how crisis communication works. Refer to the incident procedure (SH-DOR-002).]"),
+        table(
+          ["Critical or important function", "Recovery time objective", "Recovery point objective", "Recovery plan reference", "Last test date"],
+          [["[Function]", "[Hours]", "[Hours]", "[Document]", "[Date]"], ["", "", "", "", ""], ["", "", "", "", ""]]
+        ),
+        h1("9. Backup policies and restoration (Art. 12)"),
+        p("The organization shall define backup policies and procedures, and restoration and recovery procedures and methods, and shall test them periodically. Restoration shall be carried out so that backup systems are kept physically and logically separate from the source systems."),
+        p("[Guidance: set the backup frequency, retention, location and protection by data class, and the schedule of restoration tests. Refer to the Backup and Restore Testing Procedure (SH-PRC-004) if adopted.]"),
+        h1("10. Learning and evolving (Art. 13)"),
+        p("The organization shall gather information on vulnerabilities and cyber threats and on ICT-related incidents, analyse their impact, and carry out post-incident reviews after major incidents and after significant disruptions to critical functions."),
+        p("The organization shall make ICT security awareness programmes and digital operational resilience training compulsory for all staff and senior management, with the content updated regularly."),
+        p("[Guidance: describe the post-incident review process, how lessons are tracked to action, the training calendar and the sources of threat information used.]"),
+        h1("11. Communication (Art. 14)"),
+        p("The organization shall have communication plans that allow responsible disclosure of major ICT-related incidents or vulnerabilities to clients, counterparts and the public as appropriate, and shall designate at least one person to implement the communication strategy for ICT-related incidents."),
+        p("[Guidance: name the communication lead and deputy, the audiences, the approval route for statements and the channels.]"),
+        table(
+          ["Audience", "Trigger", "Message owner", "Approver", "Channel"],
+          [["Clients", "[Major incident affecting clients]", "[Name]", "[Name]", "[Channel]"], ["Competent authority", "[Major incident]", "[Name]", "[Name]", "[Channel]"], ["Staff", "[Any incident affecting operations]", "[Name]", "[Name]", "[Channel]"], ["", "", "", "", ""]]
+        ),
+        h1("12. Review and approval"),
+        p("The management body shall approve this framework and its updates. The framework shall be reviewed at least once a year, after major ICT incidents and after supervisory instructions or testing results that call for changes."),
+        table(
+          ["Version", "Date", "Change summary", "Prepared by", "Approved by"],
+          [["1.0", "[Date]", "Initial approval", "[Name]", "[Management body]"], ["", "", "", "", ""], ["", "", "", "", ""]]
+        ),
+      ],
+    },
+    es: {
+      title: "Marco de Gestión del Riesgo TIC",
+      summary: "Plantilla guiada del marco de gestión del riesgo de TIC exigido a las entidades financieras por DORA: gobernanza, identificación, protección, detección, respuesta, copias, aprendizaje y comunicación.",
+      body: [
+        h1("1. Propósito"),
+        p("Este marco describe cómo la organización gestiona el riesgo de TIC para mantener un alto nivel de resiliencia operativa digital, conforme al capítulo II del Reglamento (UE) 2022/2554 (DORA)."),
+        p("[Guía: conserve o adapte el párrafo anterior. Añada los motivos estratégicos de la organización para la resiliencia, como los compromisos con clientes y los servicios que dependen de las TIC.]"),
+        h1("2. Alcance"),
+        p("Este marco se aplica a todos los sistemas, activos, servicios y datos de TIC que utiliza la organización, incluidos los prestados por proveedores terceros de servicios de TIC, y a todo el personal y las funciones que los utilizan o gestionan."),
+        p("[Guía: enumere las entidades jurídicas, líneas de negocio, ubicaciones y plataformas incluidas, y las exclusiones con sus motivos.]"),
+        table(
+          ["Elemento incluido", "Descripción", "Responsable"],
+          [["[Función de negocio o servicio]", "[Descripción breve]", "[Nombre]"], ["", "", ""], ["", "", ""], ["", "", ""]]
+        ),
+        h1("3. Gobernanza y responsabilidad del órgano de dirección (art. 5)"),
+        p("El órgano de dirección deberá definir, aprobar, supervisar y responder de la aplicación de todas las disposiciones relacionadas con el marco de gestión del riesgo de TIC."),
+        p("[Guía: describa cómo lo hace en la práctica el órgano de dirección. Indique quién fija la estrategia de resiliencia operativa digital, qué niveles de tolerancia al riesgo y al impacto aprueba, con qué frecuencia revisa el riesgo de TIC y cómo aprueba el presupuesto.]"),
+        p("El órgano de dirección deberá mantener actualizados sus conocimientos sobre el riesgo de TIC, también mediante formación periódica, y deberá revisar los informes de riesgo de TIC al menos [cada trimestre]."),
+        p("[Guía: indique el comité o la reunión en que se revisa el riesgo de TIC y adjunte el plan de formación de los miembros del órgano de dirección.]"),
+        h2("3.1 Roles y responsabilidades"),
+        table(
+          ["Rol", "Nombre / cargo", "Responsabilidades"],
+          [
+            ["Órgano de dirección", "[Consejo u órgano equivalente]", "Aprueba el marco, la estrategia, los niveles de tolerancia y el presupuesto; supervisa la aplicación"],
+            ["Función responsable de la gestión y el control del riesgo de TIC", "[Nombre o cargo]", "Gestiona y supervisa el riesgo de TIC con independencia suficiente para evitar conflictos de intereses"],
+            ["Operaciones de TIC", "[Nombre o cargo]", "Opera y protege los sistemas de TIC; ejecuta los controles"],
+            ["Auditoría interna", "[Nombre o cargo]", "Revisa el marco de forma independiente"],
+            ["Responsable del riesgo de terceros", "[Nombre o cargo]", "Gestiona el riesgo de terceros proveedores de TIC y el registro de información"],
+            ["Gestor de incidentes", "[Nombre o cargo]", "Dirige la gestión y la notificación de los incidentes relacionados con las TIC"],
+          ]
+        ),
+        p("[Guía: muestre cómo el marco separa la función de control que gestiona el riesgo de TIC, las operaciones de TIC que lo ejecutan y la garantía independiente de la auditoría interna.]"),
+        h1("4. El marco de gestión del riesgo de TIC (arts. 6 y 7)"),
+        p("La organización mantiene un marco documentado con las estrategias, políticas, procedimientos, protocolos y herramientas de TIC necesarios para proteger su información y sus activos de TIC y para gestionar el riesgo de TIC de forma rápida, eficiente y global."),
+        p("[Guía: enumere en la tabla los documentos que componen el marco, con sus responsables y fechas de revisión. Describa la estrategia de resiliencia operativa digital y los objetivos que se derivan de ella.]"),
+        table(
+          ["Documento del marco", "Finalidad", "Responsable", "Última revisión", "Próxima revisión"],
+          [["[Nombre del documento]", "[Qué abarca]", "[Nombre]", "[Fecha]", "[Fecha]"], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""]]
+        ),
+        p("La organización deberá utilizar y mantener sistemas, protocolos y herramientas de TIC actualizados que se adecuen a sus necesidades, sean fiables, tengan capacidad suficiente y sean tecnológicamente resilientes (art. 7)."),
+        p("El marco deberá revisarse al menos una vez al año y tras los incidentes graves relacionados con las TIC, y mejorarse a partir de las lecciones aprendidas, las conclusiones de la supervisión y los resultados de las pruebas. Deberá someterse a auditoría interna independiente."),
+        h1("5. Identificación (art. 8)"),
+        p("La organización deberá identificar, clasificar y documentar sus funciones empresariales apoyadas en las TIC, los roles y responsabilidades, los activos de información y de TIC que las sustentan y sus dependencias, incluidas las de los proveedores terceros de servicios de TIC."),
+        p("[Guía: indique dónde se conserva el inventario, quién lo mantiene y con qué frecuencia se actualiza, al menos cada año. Defina la clasificación de las funciones como críticas o importantes y cómo se evalúan los sistemas heredados.]"),
+        table(
+          ["Función de negocio", "Crítica o importante (S/N)", "Activos de TIC de apoyo", "Activos de información", "Dependencias y terceros", "Responsable"],
+          [["[Función]", "[S/N]", "[Activos]", "[Datos]", "[Proveedores]", "[Nombre]"], ["", "", "", "", "", ""], ["", "", "", "", "", ""], ["", "", "", "", "", ""]]
+        ),
+        p("La organización deberá identificar todas las fuentes de riesgo de TIC, incluidas las exposiciones hacia y desde otras entidades financieras, evaluar las ciberamenazas y vulnerabilidades pertinentes para sus activos y realizar una evaluación del riesgo de TIC con cada cambio importante en la infraestructura de redes y sistemas de información."),
+        p("[Guía: describa el método de evaluación del riesgo, su frecuencia y dónde se registran los resultados.]"),
+        h1("6. Protección y prevención (art. 9)"),
+        p("La organización deberá supervisar y controlar de forma continua la seguridad y el funcionamiento de sus sistemas de TIC y utilizar herramientas, políticas y procedimientos de seguridad de las TIC que minimicen el impacto del riesgo de TIC."),
+        p("[Guía: resuma los controles de cada área y remita a los documentos detallados.]"),
+        table(
+          ["Área de control", "Requisito mínimo", "Documento de referencia", "Responsable"],
+          [
+            ["Seguridad de red", "Segmentación, filtrado, conexiones protegidas, cierre de puertos sin uso", "[Documento]", "[Nombre]"],
+            ["Gestión de accesos", "Mínimo privilegio, autenticación fuerte, revisión periódica de accesos", "[Documento]", "[Nombre]"],
+            ["Cifrado y criptografía", "Protección de los datos en reposo, en tránsito y en uso según su clasificación; gestión de claves", "[Documento]", "[Nombre]"],
+            ["Gestión de parches y de cambios", "Cambios documentados, probados y aprobados; parches oportunos", "[Documento]", "[Nombre]"],
+            ["Integridad de datos y sistemas", "Protección frente a pérdida, corrupción y acceso no autorizado", "[Documento]", "[Nombre]"],
+            ["Desarrollo y adquisición seguros", "Requisitos de seguridad integrados en la adquisición y el desarrollo", "[Documento]", "[Nombre]"],
+          ]
+        ),
+        h1("7. Detección (art. 10)"),
+        p("La organización deberá disponer de mecanismos para detectar con prontitud actividades anómalas, incluidos los problemas de rendimiento de la red y los incidentes relacionados con las TIC, e identificar posibles puntos únicos de fallo importantes."),
+        p("[Guía: describa las herramientas de supervisión, las fuentes de registros, los umbrales de alerta, los criterios que activan los procesos de respuesta a incidentes y quién revisa las alertas y con qué frecuencia.]"),
+        table(
+          ["Mecanismo de detección", "Qué supervisa", "Criterios de alerta", "Revisado por", "Frecuencia"],
+          [["[Herramienta o proceso]", "[Sistemas o eventos]", "[Umbral]", "[Rol]", "[Continua o intervalo]"], ["", "", "", "", ""], ["", "", "", "", ""]]
+        ),
+        h1("8. Respuesta y recuperación (art. 11)"),
+        p("La organización deberá mantener una política integral de continuidad de la actividad de TIC y planes de respuesta y recuperación de TIC, que deberán probarse al menos una vez al año y tras cambios sustanciales."),
+        p("[Guía: indique los objetivos de tiempo y de punto de recuperación de cada función crítica o importante, quién puede activar los planes y cómo funciona la comunicación de crisis. Remita al procedimiento de incidentes (SH-DOR-002).]"),
+        table(
+          ["Función crítica o importante", "Objetivo de tiempo de recuperación", "Objetivo de punto de recuperación", "Referencia del plan de recuperación", "Fecha de la última prueba"],
+          [["[Función]", "[Horas]", "[Horas]", "[Documento]", "[Fecha]"], ["", "", "", "", ""], ["", "", "", "", ""]]
+        ),
+        h1("9. Políticas de copia de seguridad y restauración (art. 12)"),
+        p("La organización deberá definir políticas y procedimientos de copia de seguridad, así como procedimientos y métodos de restauración y recuperación, y deberá probarlos periódicamente. La restauración deberá realizarse de modo que los sistemas de copia se mantengan separados física y lógicamente de los sistemas de origen."),
+        p("[Guía: fije la frecuencia, la conservación, la ubicación y la protección de las copias por clase de datos y el calendario de pruebas de restauración. Remita al Procedimiento de Copias de Seguridad y Pruebas de Restauración (SH-PRC-004) si se ha adoptado.]"),
+        h1("10. Aprendizaje y evolución (art. 13)"),
+        p("La organización deberá recopilar información sobre vulnerabilidades, ciberamenazas e incidentes relacionados con las TIC, analizar su impacto y realizar revisiones posteriores a los incidentes graves y a las perturbaciones significativas de las funciones críticas."),
+        p("La organización deberá hacer obligatorios para todo el personal y la alta dirección los programas de concienciación sobre la seguridad de las TIC y la formación en resiliencia operativa digital, con un contenido actualizado con regularidad."),
+        p("[Guía: describa el proceso de revisión posterior al incidente, cómo se siguen las lecciones aprendidas hasta su ejecución, el calendario de formación y las fuentes de información sobre amenazas utilizadas.]"),
+        h1("11. Comunicación (art. 14)"),
+        p("La organización deberá contar con planes de comunicación que permitan la divulgación responsable de los incidentes graves o las vulnerabilidades relacionados con las TIC a clientes, contrapartes y, según proceda, al público, y deberá designar al menos a una persona para aplicar la estrategia de comunicación de los incidentes relacionados con las TIC."),
+        p("[Guía: indique el responsable de comunicación y su suplente, los destinatarios, la vía de aprobación de los comunicados y los canales.]"),
+        table(
+          ["Destinatario", "Desencadenante", "Responsable del mensaje", "Aprobador", "Canal"],
+          [["Clientes", "[Incidente grave que afecte a clientes]", "[Nombre]", "[Nombre]", "[Canal]"], ["Autoridad competente", "[Incidente grave]", "[Nombre]", "[Nombre]", "[Canal]"], ["Personal", "[Cualquier incidente que afecte a las operaciones]", "[Nombre]", "[Nombre]", "[Canal]"], ["", "", "", "", ""]]
+        ),
+        h1("12. Revisión y aprobación"),
+        p("El órgano de dirección deberá aprobar este marco y sus actualizaciones. El marco deberá revisarse al menos una vez al año, tras los incidentes graves de TIC y tras las instrucciones de supervisión o los resultados de pruebas que exijan cambios."),
+        table(
+          ["Versión", "Fecha", "Resumen de cambios", "Elaborado por", "Aprobado por"],
+          [["1.0", "[Fecha]", "Aprobación inicial", "[Nombre]", "[Órgano de dirección]"], ["", "", "", "", ""], ["", "", "", "", ""]]
+        ),
+      ],
+    },
+  },
+
   // __NEXT_DOCS__
 ];
