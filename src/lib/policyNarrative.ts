@@ -5,7 +5,9 @@
 // The AI only drafts the surrounding narrative (Purpose / Scope / Roles / Compliance).
 // The technical controls stay VERBATIM from the source benchmark elsewhere in the document.
 
-import { llmBody, llmHeaders } from "./llm";
+import crypto from "crypto";
+import { prisma } from "./db";
+import { LLM_MODEL, llmBody, llmHeaders } from "./llm";
 
 export type Role = { role: string; responsibilities: string[] };
 export type Narrative = {
@@ -117,7 +119,8 @@ export async function aiNarrative(p: PolicyInput): Promise<Narrative | null> {
     `purposeIntro (string), purposePoints (string[]), purposeAims (string[]), scopeIntro (string), ` +
     `scopeAppliesTo (string[]), scopeCovers (string[]), roles (array of {role, responsibilities:string[]}), ` +
     `complianceIntro (string), complianceExceptionFields (string[]), complianceEnforcement (string). ` +
-    `Provide 3-5 items for each list and 5-7 roles. Do not restate individual controls.`;
+    `Provide 3-5 items for each list and 5-7 roles. Do not restate individual controls. ` +
+    `Whenever you name the organisation, write exactly ${p.org}.`;
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -163,8 +166,36 @@ function arr(v: unknown): string[] | null {
   return Array.isArray(v) && v.length ? v.map(String) : null;
 }
 
-// Resolve the narrative: AI when available, else static. Never throws.
+// The AI narrative is drafted once per benchmark with this placeholder for the organisation,
+// cached in the database, and personalised per buyer by substitution. So customers generating
+// or previewing guides never trigger a model call once a benchmark has been drafted.
+const ORG_TOKEN = "{{ORG}}";
+
+function withOrg<T>(value: T, org: string): T {
+  return JSON.parse(JSON.stringify(value).split(ORG_TOKEN).join(org.replace(/["\\]/g, ""))) as T;
+}
+
+function cacheKey(p: PolicyInput): string {
+  const basis = JSON.stringify([LLM_MODEL, p.platform, p.benchTitle, p.benchVersion, p.sectionTitles]);
+  return crypto.createHash("sha256").update(basis).digest("hex");
+}
+
+// Resolve the narrative: cached AI draft, else a fresh AI draft (then cached), else static.
+// Never throws.
 export async function resolveNarrative(p: PolicyInput): Promise<{ narrative: Narrative; aiUsed: boolean }> {
-  const ai = await aiNarrative(p);
-  return ai ? { narrative: ai, aiUsed: true } : { narrative: staticNarrative(p), aiUsed: false };
+  if (!aiAvailable()) return { narrative: staticNarrative(p), aiUsed: false };
+  const key = cacheKey(p);
+  const cached = await prisma.narrativeCache.findUnique({ where: { key } }).catch(() => null);
+  if (cached) {
+    try {
+      return { narrative: withOrg(JSON.parse(cached.json) as Narrative, p.org), aiUsed: true };
+    } catch {
+      /* corrupt row: redraft below */
+    }
+  }
+  const ai = await aiNarrative({ ...p, org: ORG_TOKEN });
+  if (!ai) return { narrative: staticNarrative(p), aiUsed: false };
+  const json = JSON.stringify(ai);
+  await prisma.narrativeCache.upsert({ where: { key }, create: { key, json }, update: { json } }).catch(() => {});
+  return { narrative: withOrg(ai, p.org), aiUsed: true };
 }

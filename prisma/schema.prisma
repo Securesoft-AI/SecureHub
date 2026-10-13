@@ -430,3 +430,11 @@ model AuditLog {
   metadata  String   @default("{}") // JSON
   createdAt DateTime @default(now())
 }
+
+// AI-drafted hardening narratives, one per benchmark, with an organisation placeholder.
+// Buyers get a copy with their name substituted, so generation never re-calls the model.
+model NarrativeCache {
+  key       String   @id // sha256 of model + platform + benchmark + version + sections
+  json      String // Narrative JSON containing the {{ORG}} placeholder
+  createdAt DateTime @default(now())
+}
