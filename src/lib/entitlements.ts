@@ -49,11 +49,19 @@ export function canGenerate(ent: Entitlements, source: SourceId, guideName?: str
 // A published Standard is generatable by a buyer who owns its assigned bundle. The
 // "Complete Policy Library" (pk-std-all) unlocks every published standard; admins ("*") too.
 const ALL_STANDARDS = "pk-std-all";
-export function ownsStandard(ent: Entitlements, bundleId: string | null | undefined): boolean {
+export function ownsStandard(ent: Entitlements, bundleIds: string[]): boolean {
   if (ent.bundleIds.includes("*")) return true;
-  if (!bundleId) return false;
+  if (!bundleIds.length) return false;
   if (ent.bundleIds.includes(ALL_STANDARDS)) return true;
-  return ent.bundleIds.includes(bundleId);
+  return bundleIds.some((id) => ent.bundleIds.includes(id));
+}
+
+// A standard's bundles: the bundleIds list, falling back to the legacy single bundleId.
+export function standardBundleIds(s: { bundleId: string | null; bundleIds: string }): string[] {
+  let ids: string[] = [];
+  try { ids = (JSON.parse(s.bundleIds) as unknown[]).filter((x): x is string => typeof x === "string"); } catch { /* bad JSON */ }
+  if (!ids.length && s.bundleId) ids = [s.bundleId];
+  return ids;
 }
 
 export async function grantBundles(userId: string, bundleIds: string[]): Promise<void> {

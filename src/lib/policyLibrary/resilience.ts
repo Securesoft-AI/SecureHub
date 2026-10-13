@@ -6,7 +6,6 @@ import type { LibraryPolicy } from "./types";
 export const RESILIENCE_POLICIES: LibraryPolicy[] = [
   {
     docId: "SH-POL-301",
-    bundle: "pk-pol-resilience",
     title: "Incident Response Policy",
     summary: "Sets how the organization detects, reports, contains, investigates and learns from information security incidents.",
     purpose:
@@ -126,7 +125,6 @@ export const RESILIENCE_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-302",
-    bundle: "pk-pol-resilience",
     title: "Business Continuity and Disaster Recovery Policy",
     summary: "Requires the organization to plan, back up, test and recover critical services so it can keep operating through disruption.",
     purpose:
@@ -236,7 +234,6 @@ export const RESILIENCE_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-303",
-    bundle: "pk-pol-resilience",
     title: "Third-Party and Supplier Security Policy",
     summary: "Governs how the organization selects, contracts, monitors and offboards suppliers that access its data or systems.",
     purpose:
@@ -345,7 +342,6 @@ export const RESILIENCE_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-304",
-    bundle: "pk-pol-resilience",
     title: "Human Resources Security Policy",
     summary: "Covers security across the employment lifecycle, from screening and onboarding through role changes, offboarding and discipline.",
     purpose:
@@ -455,7 +451,6 @@ export const RESILIENCE_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-305",
-    bundle: "pk-pol-resilience",
     title: "Physical and Environmental Security Policy",
     summary: "Protects the organization's premises, equipment and information from unauthorized physical access, damage and environmental threats.",
     purpose:
@@ -564,7 +559,6 @@ export const RESILIENCE_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-306",
-    bundle: "pk-pol-resilience",
     title: "Artificial Intelligence Acceptable Use Policy",
     summary: "Defines how personnel may use AI and generative AI tools, what data may be entered, how vendors are approved and how outputs are reviewed.",
     purpose:
@@ -676,7 +670,6 @@ export const RESILIENCE_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-307",
-    bundle: "pk-pol-resilience",
     title: "Email and Electronic Communications Policy",
     summary: "Sets rules for secure and appropriate use of email, messaging and collaboration tools and the protection of information sent through them.",
     purpose:

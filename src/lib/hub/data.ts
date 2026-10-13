@@ -2,6 +2,8 @@
 // This is the demo dataset the SPA renders; the generation engine seeds the same
 // controls into the database (prisma/seed.ts) so generated documents use real data.
 
+import { BUNDLE_MEMBERS, ALL_LIBRARY_DOCS, type LibraryBundleId } from "../policyLibrary/bundles";
+
 export type Product = {
   id: string;
   framework: string;
@@ -154,7 +156,7 @@ export const PRODUCTS: Product[] = [
 
 export const FAMILIES = [
   { id: "hardening", label: "Hardening Guides", desc: "Connect to CIS Benchmarks and DISA STIGs and generate customised hardening guides on demand — buy access by platform bundle, then create the guides you need in your own template." },
-  { id: "standards", label: "Security Standards & Policies", desc: "Editable security policies mapped to NIST CSF 2.0, ISO 27001 and NIST 800-53 — personalised with your organisation name and sold as policy packs." },
+  { id: "standards", label: "Security Standards & Policies", desc: "Editable policies, procedures, plans and registers for ISO 27001, NIS2, GDPR, ENS, DORA and SOC 2, in English and Spanish — personalised with your organisation name and logo." },
 ];
 
 // STIG products grouped into sellable packs. Prices/savings are computed from the real
@@ -204,30 +206,33 @@ export function classifyGuide(name: string): string {
   return "Other";
 }
 
-// Base policy library packs (src/lib/policyLibrary). Every policy is priced at
-// POLICY_UNIT_PRICE on its own; packs are discounted from that. `titles` must match the
-// library entries assigned to each pack (the library content stays server-side).
-export const POLICY_UNIT_PRICE = 99;
-export const POLICY_PACKS: { id: string; name: string; tagline: string; price: number; titles: string[] }[] = [
-  { id: "pk-pol-gov", name: "Governance & Risk Policies", tagline: "The foundation of an ISMS: the top-level security policy, risk, assets, classification, awareness and audit.", price: 390, titles: ["Information Security Policy", "Information Security Risk Management Policy", "Acceptable Use Policy", "Asset Management Policy", "Data Classification and Handling Policy", "Security Awareness and Training Policy", "Compliance and Internal Audit Policy", "Policy Governance and Exception Management Policy"] },
-  { id: "pk-pol-access", name: "Identity, Access & Data Protection Policies", tagline: "Who gets access to what, how it is authenticated, and how data is encrypted, retained and protected.", price: 390, titles: ["Access Control Policy", "Identity and Authentication Policy", "Privileged Access Management Policy", "Remote Access Policy", "Cryptography and Key Management Policy", "Data Retention and Secure Disposal Policy", "Privacy and Personal Data Protection Policy", "Data Loss Prevention Policy"] },
-  { id: "pk-pol-ops", name: "IT Operations & Technical Security Policies", tagline: "Day-to-day technical security: hardening, patching, logging, endpoints, network, change, backup, cloud and SDLC.", price: 490, titles: ["Secure Configuration and Hardening Policy", "Vulnerability and Patch Management Policy", "Logging and Security Monitoring Policy", "Endpoint and Malware Protection Policy", "Network Security Policy", "Change and Configuration Management Policy", "Backup and Recovery Policy", "Cloud Security Policy", "Secure Software Development Policy", "Mobile Device and BYOD Policy"] },
-  { id: "pk-pol-resilience", name: "Resilience, People & Third-Party Policies", tagline: "Incidents, continuity, suppliers, HR, physical security, AI use and communications.", price: 350, titles: ["Incident Response Policy", "Business Continuity and Disaster Recovery Policy", "Third-Party and Supplier Security Policy", "Human Resources Security Policy", "Physical and Environmental Security Policy", "Artificial Intelligence Acceptable Use Policy", "Email and Electronic Communications Policy"] },
+// Document library bundles (src/lib/policyLibrary). Membership lives in policyLibrary/bundles.ts
+// (one document can sit in several bundles); a single document is valued at LIBRARY_UNIT_PRICE.
+export const LIBRARY_UNIT_PRICE = 99;
+export const LIBRARY_PACKS: { id: LibraryBundleId; name: string; tagline: string; price: number; highlights: string[] }[] = [
+  { id: "pk-iso27001", name: "ISO 27001 Starter Kit", tagline: "Everything to build and certify an ISO/IEC 27001:2022 ISMS: policies, procedures, plans, registers and the Statement of Applicability.", price: 990, highlights: ["33 security policies", "Statement of Applicability (93 controls)", "ISMS scope, risk methodology and treatment plan", "Internal audit programme and management review", "Incident, continuity and recovery plans", "Risk, asset and supplier registers"] },
+  { id: "pk-nis2", name: "NIS2 Compliance Pack", tagline: "The cybersecurity risk-management measures of NIS2 Art. 21, incident notification (Art. 23) and management body accountability (Art. 20).", price: 790, highlights: ["24 policies covering Art. 21 measures", "NIS2 incident notification procedure (24 h / 72 h / 1 month)", "Management body accountability and training", "NIS2 compliance self-assessment", "Supplier assessment and register"] },
+  { id: "pk-gdpr", name: "GDPR Privacy Pack", tagline: "Records, assessments and procedures to demonstrate GDPR accountability.", price: 490, highlights: ["Record of processing activities (Art. 30)", "DPIA template (Art. 35)", "Personal data breach procedure (72 h)", "Data subject rights procedure", "Data processing agreement (Art. 28)", "Privacy notice, cookie policy and retention schedule"] },
+  { id: "pk-ens", name: "ENS Compliance Pack", tagline: "Esquema Nacional de Seguridad (RD 311/2022): política, normativa, categorización, declaración de aplicabilidad y plan de adecuación.", price: 790, highlights: ["Política de seguridad (art. 12)", "Normativa de seguridad", "Categorización del sistema (Anexo I)", "Declaración de aplicabilidad (Anexo II)", "Análisis de riesgos y gestión de incidentes (CCN-CERT)", "Plan de adecuación al ENS"] },
+  { id: "pk-dora", name: "DORA Compliance Pack", tagline: "ICT risk management, incident reporting, resilience testing and third-party risk under the Digital Operational Resilience Act.", price: 990, highlights: ["ICT risk management framework", "ICT incident classification and reporting", "Resilience testing programme", "Register of information on ICT third parties", "ICT third-party exit strategy"] },
+  { id: "pk-soc2", name: "SOC 2 Readiness Pack", tagline: "Policies and evidence mapped to the Trust Services Criteria, ready for your auditor.", price: 790, highlights: ["33 security policies", "Trust Services Criteria control matrix", "Audit evidence checklist", "Vendor risk questionnaire", "System description template"] },
+  { id: "pk-essentials", name: "Essentials for SMBs", tagline: "The core policies and plans every small business needs to start securing itself.", price: 290, highlights: ["12 core security policies", "Incident response plan", "Risk register and asset inventory"] },
 ];
-const POLICY_SUITE_PRICE = 1290;
+const LIBRARY_SUITE_PRICE = 2490;
 
-function policyPack(p: (typeof POLICY_PACKS)[number]): Bundle {
-  return { id: p.id, family: "standards", framework: "PACK", name: p.name, tagline: p.tagline, price: usd(p.price), count: p.titles.length, savings: usd(Math.max(0, p.titles.length * POLICY_UNIT_PRICE - p.price)), includes: p.titles };
+function libraryPack(p: (typeof LIBRARY_PACKS)[number]): Bundle {
+  const count = BUNDLE_MEMBERS[p.id].length;
+  return { id: p.id, family: "standards", framework: "PACK", name: p.name, tagline: p.tagline, price: usd(p.price), count, savings: usd(Math.max(0, count * LIBRARY_UNIT_PRICE - p.price)), includes: p.highlights };
 }
-const policyTotal = POLICY_PACKS.reduce((a, p) => a + p.titles.length, 0);
+const libraryTotal = ALL_LIBRARY_DOCS.length;
 
 export const BUNDLES: Bundle[] = [
   // One hardening bundle: buying it unlocks unlimited on-demand generation of
   // CIS Benchmark and DISA STIG guides across every platform.
   makePack("pk-stig-all", "Hardening Access — CIS & DISA", "One bundle, unlimited guides. Generate CIS Benchmark and DISA STIG hardening guides on demand across every platform — operating systems, network, databases, web, containers and virtualization.", Object.values(STIG_GROUPS).flat(), 1990, true),
-  // The complete base policy library (every pack below, plus every standard published later).
-  { id: "pk-std-all", family: "standards", framework: "PACK", name: "Complete Policy Library", tagline: "Every editable security policy we publish — governance, access, operations and resilience — mapped to NIST CSF 2.0, ISO 27001 and NIST 800-53.", price: usd(POLICY_SUITE_PRICE), count: policyTotal, savings: usd(policyTotal * POLICY_UNIT_PRICE - POLICY_SUITE_PRICE), featured: true, includes: [...POLICY_PACKS.map((p) => p.name), "Every policy and standard added in the future"] },
-  ...POLICY_PACKS.map(policyPack),
+  // The complete document library (every bundle below, plus everything published later).
+  { id: "pk-std-all", family: "standards", framework: "PACK", name: "Complete Compliance Library", tagline: "Every policy, procedure, plan, register and form we publish, in English and Spanish — ISO 27001, NIS2, GDPR, ENS, DORA and SOC 2.", price: usd(LIBRARY_SUITE_PRICE), count: libraryTotal, savings: usd(libraryTotal * LIBRARY_UNIT_PRICE - LIBRARY_SUITE_PRICE), featured: true, includes: [...LIBRARY_PACKS.map((p) => p.name), "Everything added in the future"] },
+  ...LIBRARY_PACKS.map(libraryPack),
 ];
 
 export const DIRECTORY: Record<string, { cat: string; items: string[] }[]> = {
@@ -236,8 +241,8 @@ export const DIRECTORY: Record<string, { cat: string; items: string[] }[]> = {
     cat,
     items: ids.map((id) => _byId(id)?.name.replace(/^DISA STIG — /, "") || id),
   })),
-  // Standards directory is the base policy library, grouped by pack.
-  standards: POLICY_PACKS.map((p) => ({ cat: p.name, items: p.titles })),
+  // Standards directory: what each library bundle contains.
+  standards: LIBRARY_PACKS.map((p) => ({ cat: p.name, items: p.highlights })),
 };
 
 export const SAMPLE = [

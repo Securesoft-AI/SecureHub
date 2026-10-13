@@ -285,7 +285,8 @@ model Standard {
   masterDocx  String?  // base64 master DOCX (library documents imported ready-made)
   status      String   @default("draft") // draft | published
   hidden      Boolean  @default(true) // hidden from clients until surfaced
-  bundleId    String? // catalog bundle it belongs to
+  bundleId    String? // legacy single bundle; superseded by bundleIds
+  bundleIds   String   @default("[]") // JSON string[] — every catalog bundle that includes it
   priceCents  Int? // standalone price (optional)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())

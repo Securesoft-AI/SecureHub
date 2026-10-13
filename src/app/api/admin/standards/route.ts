@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getSessionUser, canManageCatalog } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { standardBundleIds } from "@/lib/entitlements";
 import { draftStandardFromUrl } from "@/lib/standardDraft";
 
 export const runtime = "nodejs";
@@ -13,7 +14,7 @@ export async function GET() {
   if (!user || !canManageCatalog(user.role)) return NextResponse.json({ error: "Admin access required." }, { status: 403 });
   const rows = await prisma.standard.findMany({ orderBy: { createdAt: "desc" }, take: 200 }).catch(() => []);
   return NextResponse.json({
-    standards: rows.map((s) => ({ id: s.id, title: s.title, sourceUrl: s.sourceUrl, platform: s.platform, summary: s.summary, status: s.status, hidden: s.hidden, bundleId: s.bundleId, priceCents: s.priceCents, createdAt: s.createdAt.toISOString() })),
+    standards: rows.map((s) => ({ id: s.id, title: s.title, sourceUrl: s.sourceUrl, platform: s.platform, summary: s.summary, status: s.status, hidden: s.hidden, bundleId: s.bundleId, bundleIds: standardBundleIds(s), priceCents: s.priceCents, createdAt: s.createdAt.toISOString() })),
   });
 }
 

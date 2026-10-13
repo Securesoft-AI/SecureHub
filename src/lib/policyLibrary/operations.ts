@@ -5,7 +5,6 @@ import type { LibraryPolicy } from "./types";
 export const OPERATIONS_POLICIES: LibraryPolicy[] = [
   {
     docId: "SH-POL-201",
-    bundle: "pk-pol-ops",
     title: "Secure Configuration and Hardening Policy",
     summary: "Requires approved, hardened baselines for all systems and continuous detection of configuration drift.",
     purpose:
@@ -119,7 +118,6 @@ export const OPERATIONS_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-202",
-    bundle: "pk-pol-ops",
     title: "Vulnerability and Patch Management Policy",
     summary: "Sets scanning frequencies, risk-based remediation deadlines and patching expectations for all technology assets.",
     purpose:
@@ -242,7 +240,6 @@ export const OPERATIONS_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-203",
-    bundle: "pk-pol-ops",
     title: "Logging and Security Monitoring Policy",
     summary: "Defines which events must be logged, how logs are protected and retained, and how security alerts are monitored.",
     purpose:
@@ -354,7 +351,6 @@ export const OPERATIONS_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-204",
-    bundle: "pk-pol-ops",
     title: "Endpoint and Malware Protection Policy",
     summary: "Requires managed, protected endpoints with anti-malware, endpoint detection and controls on software and removable media.",
     purpose:
@@ -465,7 +461,6 @@ export const OPERATIONS_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-205",
-    bundle: "pk-pol-ops",
     title: "Network Security Policy",
     summary: "Requires segmented, default-deny networks with controlled perimeters, secure remote access and protected wireless.",
     purpose:
@@ -570,7 +565,6 @@ export const OPERATIONS_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-206",
-    bundle: "pk-pol-ops",
     title: "Change and Configuration Management Policy",
     summary: "Requires changes to production systems to be recorded, assessed, approved, tested and reviewed.",
     purpose:
@@ -679,7 +673,6 @@ export const OPERATIONS_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-207",
-    bundle: "pk-pol-ops",
     title: "Backup and Recovery Policy",
     summary: "Sets backup frequency, retention, protection and restore testing so critical data can be recovered after loss or attack.",
     purpose:
@@ -774,7 +767,6 @@ export const OPERATIONS_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-208",
-    bundle: "pk-pol-ops",
     title: "Cloud Security Policy",
     summary: "Governs the selection, configuration, access and monitoring of cloud services used by the organization.",
     purpose:
@@ -885,7 +877,6 @@ export const OPERATIONS_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-209",
-    bundle: "pk-pol-ops",
     title: "Secure Software Development Policy",
     summary: "Builds security into every stage of software development, from requirements and design to testing, release and maintenance.",
     purpose:
@@ -999,7 +990,6 @@ export const OPERATIONS_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-210",
-    bundle: "pk-pol-ops",
     title: "Mobile Device and BYOD Policy",
     summary: "Sets the conditions under which corporate and personally owned mobile devices may access organizational information.",
     purpose:

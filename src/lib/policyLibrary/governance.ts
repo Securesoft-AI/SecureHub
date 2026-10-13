@@ -5,7 +5,6 @@ import type { LibraryPolicy } from "./types";
 export const GOVERNANCE_POLICIES: LibraryPolicy[] = [
   {
     docId: "SH-POL-001",
-    bundle: "pk-pol-gov",
     title: "Information Security Policy",
     summary: "Sets the direction, leadership commitment and governance structure for the organization's information security management system.",
     purpose:
@@ -127,7 +126,6 @@ export const GOVERNANCE_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-002",
-    bundle: "pk-pol-gov",
     title: "Information Security Risk Management Policy",
     summary: "Defines how the organization identifies, assesses, treats, accepts and monitors information security risks.",
     purpose:
@@ -247,7 +245,6 @@ export const GOVERNANCE_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-003",
-    bundle: "pk-pol-gov",
     title: "Acceptable Use Policy",
     summary: "Sets the rules for acceptable use of the organization's information, devices, networks and online services.",
     purpose:
@@ -377,7 +374,6 @@ export const GOVERNANCE_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-004",
-    bundle: "pk-pol-gov",
     title: "Asset Management Policy",
     summary: "Requires the organization to inventory, assign ownership of, track and securely dispose of its information and technology assets.",
     purpose:
@@ -494,7 +490,6 @@ export const GOVERNANCE_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-005",
-    bundle: "pk-pol-gov",
     title: "Data Classification and Handling Policy",
     summary: "Defines the organization's data classification levels and the handling rules that apply to each level.",
     purpose:
@@ -614,7 +609,6 @@ export const GOVERNANCE_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-006",
-    bundle: "pk-pol-gov",
     title: "Security Awareness and Training Policy",
     summary: "Requires all personnel to receive security awareness training and role-based training appropriate to their responsibilities.",
     purpose:
@@ -715,7 +709,6 @@ export const GOVERNANCE_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-007",
-    bundle: "pk-pol-gov",
     title: "Compliance and Internal Audit Policy",
     summary: "Establishes how the organization identifies its compliance obligations and independently audits its security controls.",
     purpose:
@@ -831,7 +824,6 @@ export const GOVERNANCE_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-008",
-    bundle: "pk-pol-gov",
     title: "Policy Governance and Exception Management Policy",
     summary: "Governs how security policies are written, approved, reviewed and communicated, and how exceptions to them are requested and controlled.",
     purpose:

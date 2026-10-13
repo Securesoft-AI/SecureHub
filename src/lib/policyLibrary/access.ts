@@ -5,7 +5,6 @@ import type { LibraryPolicy } from "./types";
 export const ACCESS_POLICIES: LibraryPolicy[] = [
   {
     docId: "SH-POL-101",
-    bundle: "pk-pol-access",
     title: "Access Control Policy",
     summary: "Defines how access to information and systems is requested, approved, granted, reviewed and removed on a least-privilege basis.",
     purpose:
@@ -123,7 +122,6 @@ export const ACCESS_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-102",
-    bundle: "pk-pol-access",
     title: "Identity and Authentication Policy",
     summary: "Sets requirements for user identities, passwords, multi-factor authentication, single sign-on and service accounts.",
     purpose:
@@ -246,7 +244,6 @@ export const ACCESS_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-103",
-    bundle: "pk-pol-access",
     title: "Privileged Access Management Policy",
     summary: "Controls the granting, use, monitoring and review of administrative and other privileged access to the organization's systems.",
     purpose:
@@ -364,7 +361,6 @@ export const ACCESS_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-104",
-    bundle: "pk-pol-access",
     title: "Remote Access Policy",
     summary: "Specifies how staff and third parties may securely connect to the organization's systems and data from outside its premises.",
     purpose:
@@ -474,7 +470,6 @@ export const ACCESS_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-105",
-    bundle: "pk-pol-access",
     title: "Cryptography and Key Management Policy",
     summary: "Defines approved cryptographic algorithms, protocols and the lifecycle controls for encryption keys and certificates.",
     purpose:
@@ -588,7 +583,6 @@ export const ACCESS_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-106",
-    bundle: "pk-pol-access",
     title: "Data Retention and Secure Disposal Policy",
     summary: "Sets how long the organization keeps information and how it securely deletes data and sanitizes media when retention ends.",
     purpose:
@@ -700,7 +694,6 @@ export const ACCESS_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-107",
-    bundle: "pk-pol-access",
     title: "Privacy and Personal Data Protection Policy",
     summary: "Sets the principles and controls the organization applies to collect, use, share and protect personal data lawfully and transparently.",
     purpose:
@@ -827,7 +820,6 @@ export const ACCESS_POLICIES: LibraryPolicy[] = [
   },
   {
     docId: "SH-POL-108",
-    bundle: "pk-pol-access",
     title: "Data Loss Prevention Policy",
     summary: "Defines controls to detect and prevent unauthorized disclosure or exfiltration of sensitive information across endpoints, network, email and cloud.",
     purpose:

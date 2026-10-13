@@ -71,7 +71,7 @@ function BundleEditor({ b, onClose, onSaved }: { b: Editing; onClose: () => void
   );
 }
 
-type Std = { id: string; title: string; status: string; hidden: boolean; bundleId: string | null; priceCents: number | null; platform: string | null };
+type Std = { id: string; title: string; status: string; hidden: boolean; bundleId: string | null; bundleIds: string[]; priceCents: number | null; platform: string | null };
 
 function StandardsSection({ bundles }: { bundles: Bundle[] }) {
   const [list, setList] = useState<Std[] | null>(null);
@@ -115,10 +115,17 @@ function StandardsSection({ bundles }: { bundles: Bundle[] }) {
             <div key={st.id} style={css("display:grid;grid-template-columns:1.6fr 1.2fr 90px 110px 90px;padding:12px 18px;border-bottom:1px solid #EFEEEC;font-size:13px;align-items:center;gap:8px;")}>
               <div style={css("font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;")}>{st.title}</div>
               <div>
-                <select value={st.bundleId || ""} onChange={(e) => patch(st.id, { bundleId: e.target.value || null })} style={css(input + "width:100%;")}>
-                  <option value="">— none —</option>
-                  {bundles.filter((b) => b.family === "standards").map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
-                </select>
+                <div style={css("display:flex;flex-wrap:wrap;gap:4px;")}>
+                  {bundles.filter((b) => b.family === "standards" && b.id !== "pk-std-all").map((b) => {
+                    const on = (st.bundleIds || []).includes(b.id);
+                    const next = on ? st.bundleIds.filter((x) => x !== b.id) : [...(st.bundleIds || []), b.id];
+                    return (
+                      <span key={b.id} title={b.name} onClick={() => patch(st.id, { bundleIds: next })} style={css(`cursor:pointer;font-size:10.5px;font-weight:600;border-radius:20px;padding:3px 8px;border:1px solid ${on ? "#0f4c9c" : "#E7E6E5"};background:${on ? "#e8eef8" : "#fff"};color:${on ? "#0f4c9c" : "#79716B"};`)}>
+                        {b.name.replace(/ (Starter Kit|Compliance Pack|Readiness|Pack)$/, "")}
+                      </span>
+                    );
+                  })}
+                </div>
               </div>
               <div>
                 <input defaultValue={st.priceCents != null ? String(st.priceCents / 100) : ""} placeholder="$" onBlur={(e) => { const n = e.target.value.trim() ? Math.round(parseFloat(e.target.value) * 100) : null; patch(st.id, { priceCents: n }); }} style={css(input + "width:70px;")} />
