@@ -1,6 +1,6 @@
 // Shared settings for the Anthropic Messages API calls (policy narrative + standard author).
 
-export const LLM_MODEL = process.env.POLICY_LLM_MODEL || "claude-opus-5-5";
+export const LLM_MODEL = process.env.POLICY_LLM_MODEL || "claude-sonnet-5-5";
 
 // Server-side refusal fallback: if a safety classifier declines a request (security content can
 // trip the cyber classifier), the API retries it on a suitable model inside the same call.

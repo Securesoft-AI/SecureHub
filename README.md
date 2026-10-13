@@ -34,7 +34,7 @@ Deployment to Railway is described in [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md).
 
 ### AI drafting (optional)
 
-With `ANTHROPIC_API_KEY` set, Claude drafts the policy narrative and authors standards from a source URL (`src/lib/llm.ts`). The model defaults to `claude-opus-5-5` and can be changed with `POLICY_LLM_MODEL`. Without a key, a built-in static narrative is used.
+With `ANTHROPIC_API_KEY` set, Claude drafts the policy narrative and authors standards from a source URL (`src/lib/llm.ts`). The model defaults to `claude-sonnet-5-5` and can be changed with `POLICY_LLM_MODEL`. Without a key, a built-in static narrative is used.
 
 ## What's implemented
 
