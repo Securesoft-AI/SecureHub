@@ -39,7 +39,7 @@ async function pdfToText(buffer: Buffer): Promise<string> {
 export type DraftResult = { title: string; platform: string; content: StandardContent; aiUsed: boolean };
 
 export async function draftStandardFromUrl(url: string): Promise<DraftResult> {
-  const res = await fetch(url, { headers: { "user-agent": "Mozilla/5.0 HardenHubBot", accept: "text/html,application/xhtml+xml,application/pdf,*/*" }, signal: AbortSignal.timeout(45000) });
+  const res = await fetch(url, { headers: { "user-agent": "Mozilla/5.0 SecureHubBot", accept: "text/html,application/xhtml+xml,application/pdf,*/*" }, signal: AbortSignal.timeout(45000) });
   if (!res.ok) throw new Error(`Could not fetch the source (HTTP ${res.status}).`);
   const contentType = res.headers.get("content-type") || "";
   const isPdf = /application\/pdf/i.test(contentType) || /\.pdf($|\?)/i.test(url);

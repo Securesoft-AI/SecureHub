@@ -22,8 +22,8 @@ export function Auth() {
     <div style={css("min-height:calc(100vh - 62px);display:flex;align-items:center;justify-content:center;padding:40px 20px;")}>
       <div style={css("width:100%;max-width:420px;")}>
         <div style={css("text-align:center;margin-bottom:26px;")}>
-          <div style={css("height:44px;width:44px;border-radius:11px;background:#0f4c9c;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-weight:700;font-size:22px;")}>H</div>
-          <h2 style={css("margin:16px 0 4px;font-size:22px;font-weight:800;")}>{mode === "login" ? "Sign in to HardenHub" : "Create your account"}</h2>
+          <div style={css("height:44px;width:44px;border-radius:11px;background:#0f4c9c;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-weight:700;font-size:22px;")}>S</div>
+          <h2 style={css("margin:16px 0 4px;font-size:22px;font-weight:800;")}>{mode === "login" ? "Sign in to SecureHub" : "Create your account"}</h2>
           <p style={css("margin:0;color:#57534E;font-size:13.5px;")}>{mode === "login" ? "Access your guides and library." : "Buy access, then generate guides on demand in your template."}</p>
         </div>
 
@@ -54,7 +54,7 @@ export function Auth() {
 
         <div style={css("text-align:center;margin-top:16px;font-size:13px;color:#57534E;")}>
           {mode === "login" ? (
-            <>New to HardenHub? <button onClick={() => setAuthMode("signup")} style={css("background:none;border:none;color:#0f4c9c;font-weight:600;cursor:pointer;font-size:13px;")}>Create an account</button></>
+            <>New to SecureHub? <button onClick={() => setAuthMode("signup")} style={css("background:none;border:none;color:#0f4c9c;font-weight:600;cursor:pointer;font-size:13px;")}>Create an account</button></>
           ) : (
             <>Already have an account? <button onClick={() => setAuthMode("login")} style={css("background:none;border:none;color:#0f4c9c;font-weight:600;cursor:pointer;font-size:13px;")}>Sign in</button></>
           )}

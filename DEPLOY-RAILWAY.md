@@ -7,8 +7,7 @@ CIS needs your CIS WorkBench session.
 ## One-time setup (≈3 minutes)
 
 1. **Create the project** — [railway.app](https://railway.app) → **New Project** →
-   **Deploy from GitHub repo** → pick `lander86-ship-it/compliance` and the branch
-   `claude/hardening-guides-ecommerce-p83y1v` (or `main` once merged).
+   **Deploy from GitHub repo** → pick `Securesoft-AI/SecureHub` and the branch `main`.
    Railway detects `railway.json` and builds the `Dockerfile`.
 
 2. **Add PostgreSQL** — in the project, **New** → **Database** → **PostgreSQL**.

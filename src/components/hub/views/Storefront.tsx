@@ -34,7 +34,7 @@ export function Storefront() {
             Security configuration baselines
           </div>
           <h1 style={css(`margin:0 0 16px;font-weight:700;letter-spacing:-.03em;line-height:1.06;max-width:760px;color:#1C1917;${m ? "font-size:27px;" : "font-size:42px;"}`)}>Audit-ready hardening standards for every platform you run</h1>
-          <p style={css(`margin:0 0 30px;line-height:1.6;color:#57534E;max-width:650px;${m ? "font-size:14px;" : "font-size:16px;"}`)}>HardenHub turns CIS Benchmarks and DISA STIGs into branded, scoped, board-ready security documents — mapped to NIST 800-53, NIST CSF and ISO 27002, and exported to DOCX, PDF and XLSX in minutes instead of weeks.</p>
+          <p style={css(`margin:0 0 30px;line-height:1.6;color:#57534E;max-width:650px;${m ? "font-size:14px;" : "font-size:16px;"}`)}>SecureHub turns CIS Benchmarks and DISA STIGs into branded, scoped, board-ready security documents — mapped to NIST 800-53, NIST CSF and ISO 27002, and exported to DOCX, PDF and XLSX in minutes instead of weeks.</p>
           <div style={css("display:flex;flex-wrap:wrap;gap:11px;")}>
             {heroFeatures.map((hf) => (
               <div key={hf.label} style={css("display:flex;align-items:center;gap:9px;background:#FBFAF9;border:1px solid #E7E6E5;border-radius:999px;padding:10px 17px 10px 14px;font-size:13px;font-weight:500;color:#57534E;box-shadow:0 1px 2px rgba(28,25,23,.04);")}>

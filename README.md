@@ -1,30 +1,40 @@
-# HardenHub
+# SecureHub
 
 E-commerce platform for **security hardening guides and standards** (CIS Benchmarks, DISA STIG, NIST) with per-customer customization and a real **document-generation engine** (DOCX / PDF / XLSX).
 
 Built from the FRD (v0.1) and the `HardenHub.dc.html` design. This is the **MVP (Phase 1)** vertical slice, implemented as a Next.js app with a working generation backend.
 
-> Branding follows the design file (**HardenHub**). Package/DB name is `controlforge` — trivial to rename.
+> Originally prototyped as **HardenHub** (the design file name); the product is now branded **SecureHub**.
 
 ## Stack
 
 | Layer | Choice |
 |---|---|
 | Framework | Next.js 14 (App Router, TypeScript) |
-| Data | Prisma + SQLite (`prisma/schema.prisma` maps §9 of the FRD) |
+| Runtime | Node.js 22 (`.nvmrc`) |
+| Data | Prisma + PostgreSQL (`prisma/schema.prisma` maps §9 of the FRD) |
 | UI | React + ported design system (`src/lib/hub/theme.ts` `css()` helper) |
 | Generation | `docx` · `pdf-lib` · `exceljs` |
 | Payments | Stripe-ready (stub checkout in the UI) |
 
 ## Quick start
 
+Requires Node 22 and a PostgreSQL database.
+
 ```bash
 npm install
-cp .env.example .env
-npm run db:push      # create SQLite schema
+cp .env.example .env # then set DATABASE_URL to your Postgres instance
+npm run db:push      # create the schema
 npm run db:seed      # seed frameworks, controls, mappings, products, coupon, demo org
 npm run dev          # http://localhost:3000
+npm run lint         # ESLint (next/core-web-vitals)
 ```
+
+Deployment to Railway is described in [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md).
+
+### AI drafting (optional)
+
+With `ANTHROPIC_API_KEY` set, Claude drafts the policy narrative and authors standards from a source URL (`src/lib/llm.ts`). The model defaults to `claude-opus-5-5` and can be changed with `POLICY_LLM_MODEL`. Without a key, a built-in static narrative is used.
 
 ## What's implemented
 

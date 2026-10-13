@@ -37,7 +37,7 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
 
   // Header
   page.drawRectangle({ x: M, y: y - 4, width: 30, height: 30, color: brand });
-  text("HardenHub", M + 40, 20, bold, brand);
+  text("SecureHub", M + 40, 20, bold, brand);
   text("INVOICE", 595 - M - bold.widthOfTextAtSize("INVOICE", 20), 20, bold, ink);
   y -= 30;
   text("Compliance guide generation platform", M + 40, 9, font, muted);
@@ -82,7 +82,7 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
 
   text(p.method === "demo" || p.method === "stub" ? "Simulated transaction (no charge) — demo/pre-Stripe checkout." : "Thank you for your purchase.", M, 9, font, muted);
   y -= 40;
-  text("HardenHub  ·  Generated compliance documentation  ·  This invoice was produced automatically.", M, 8, font, muted);
+  text("SecureHub  ·  Generated compliance documentation  ·  This invoice was produced automatically.", M, 8, font, muted);
 
   const bytes = await pdf.save();
   return new NextResponse(Buffer.from(bytes), {

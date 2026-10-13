@@ -1,6 +1,6 @@
-// ControlForge — data model.
-// Maps §9 of the FRD. SQLite for dev; swap `provider` to postgresql for production.
-// SQLite has no native array/JSON column, so list/JSON fields are stored as JSON strings
+// SecureHub — data model.
+// Maps §9 of the FRD. PostgreSQL in dev and production.
+// List/JSON fields are stored as JSON strings (a holdover from the SQLite prototype)
 // and (de)serialized in src/lib/serialize.ts.
 
 generator client {
