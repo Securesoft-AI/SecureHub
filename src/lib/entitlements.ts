@@ -47,7 +47,7 @@ export function canGenerate(ent: Entitlements, source: SourceId, guideName?: str
 }
 
 // A published Standard is generatable by a buyer who owns its assigned bundle. The
-// "Complete Standards Suite" (pk-std-all) unlocks every published standard; admins ("*") too.
+// "Complete Policy Library" (pk-std-all) unlocks every published standard; admins ("*") too.
 const ALL_STANDARDS = "pk-std-all";
 export function ownsStandard(ent: Entitlements, bundleId: string | null | undefined): boolean {
   if (ent.bundleIds.includes("*")) return true;

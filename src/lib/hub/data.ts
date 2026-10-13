@@ -153,7 +153,7 @@ export const PRODUCTS: Product[] = [
 
 export const FAMILIES = [
   { id: "hardening", label: "Hardening Guides", desc: "Connect to CIS Benchmarks and DISA STIGs and generate customised hardening guides on demand — buy access by platform bundle, then create the guides you need in your own template." },
-  { id: "standards", label: "Security Standards & Policies", desc: "Generate editable policies, procedures and compliance programs mapped to frameworks — sold as governance-access bundles." },
+  { id: "standards", label: "Security Standards & Policies", desc: "Editable security policies mapped to NIST CSF 2.0, ISO 27001 and NIST 800-53 — personalised with your organisation name and sold as policy packs." },
 ];
 
 // STIG products grouped into sellable packs. Prices/savings are computed from the real
@@ -173,14 +173,17 @@ const _byId = (id: string) => PRODUCTS.find((p) => p.id === id);
 const ID_TO_CATEGORY: Record<string, string> = {};
 for (const [cat, ids] of Object.entries(STIG_GROUPS)) for (const id of ids) ID_TO_CATEGORY[id] = cat;
 
-function makePack(id: string, name: string, tagline: string, ids: string[], discountPct: number, featured = false): Bundle {
+// A pack's price is fixed (set for the market, not derived from the sum of its members);
+// the "savings" shown is what the member guides would cost bought one by one.
+function makePack(id: string, name: string, tagline: string, ids: string[], price: number, featured = false): Bundle {
   const members = ids.map(_byId).filter(Boolean) as Product[];
   const sum = members.reduce((a, p) => a + _pn(p.price), 0);
-  const price = Math.round((sum * (1 - discountPct / 100)) / 10) * 10;
-  const savings = sum - price;
+  const savings = Math.max(0, sum - price);
   const categories = [...new Set(ids.map((i) => ID_TO_CATEGORY[i]).filter(Boolean))];
-  return { id, family: "hardening", framework: "PACK", name, tagline, price: "$" + price.toLocaleString("en-US"), count: members.length, savings: "$" + savings.toLocaleString("en-US"), featured, includes: members.map((p) => p.name), sources: ["cis", "disa"], categories };
+  return { id, family: "hardening", framework: "PACK", name, tagline, price: usd(price), count: members.length, savings: usd(savings), featured, includes: members.map((p) => p.name), sources: ["cis", "disa"], categories };
 }
+
+const usd = (n: number) => "$" + n.toLocaleString("en-US");
 
 // Keyword → category classifier for a live benchmark name (from CIS/DISA search),
 // so entitlements can gate which guides a buyer may generate.
@@ -200,16 +203,30 @@ export function classifyGuide(name: string): string {
   return "Other";
 }
 
+// Base policy library packs (src/lib/policyLibrary). Every policy is priced at
+// POLICY_UNIT_PRICE on its own; packs are discounted from that. `titles` must match the
+// library entries assigned to each pack (the library content stays server-side).
+export const POLICY_UNIT_PRICE = 99;
+export const POLICY_PACKS: { id: string; name: string; tagline: string; price: number; titles: string[] }[] = [
+  { id: "pk-pol-gov", name: "Governance & Risk Policies", tagline: "The foundation of an ISMS: the top-level security policy, risk, assets, classification, awareness and audit.", price: 390, titles: ["Information Security Policy", "Information Security Risk Management Policy", "Acceptable Use Policy", "Asset Management Policy", "Data Classification and Handling Policy", "Security Awareness and Training Policy", "Compliance and Internal Audit Policy", "Policy Governance and Exception Management Policy"] },
+  { id: "pk-pol-access", name: "Identity, Access & Data Protection Policies", tagline: "Who gets access to what, how it is authenticated, and how data is encrypted, retained and protected.", price: 390, titles: ["Access Control Policy", "Identity and Authentication Policy", "Privileged Access Management Policy", "Remote Access Policy", "Cryptography and Key Management Policy", "Data Retention and Secure Disposal Policy", "Privacy and Personal Data Protection Policy", "Data Loss Prevention Policy"] },
+  { id: "pk-pol-ops", name: "IT Operations & Technical Security Policies", tagline: "Day-to-day technical security: hardening, patching, logging, endpoints, network, change, backup, cloud and SDLC.", price: 490, titles: ["Secure Configuration and Hardening Policy", "Vulnerability and Patch Management Policy", "Logging and Security Monitoring Policy", "Endpoint and Malware Protection Policy", "Network Security Policy", "Change and Configuration Management Policy", "Backup and Recovery Policy", "Cloud Security Policy", "Secure Software Development Policy", "Mobile Device and BYOD Policy"] },
+  { id: "pk-pol-resilience", name: "Resilience, People & Third-Party Policies", tagline: "Incidents, continuity, suppliers, HR, physical security, AI use and communications.", price: 350, titles: ["Incident Response Policy", "Business Continuity and Disaster Recovery Policy", "Third-Party and Supplier Security Policy", "Human Resources Security Policy", "Physical and Environmental Security Policy", "Artificial Intelligence Acceptable Use Policy", "Email and Electronic Communications Policy"] },
+];
+const POLICY_SUITE_PRICE = 1290;
+
+function policyPack(p: (typeof POLICY_PACKS)[number]): Bundle {
+  return { id: p.id, family: "standards", framework: "PACK", name: p.name, tagline: p.tagline, price: usd(p.price), count: p.titles.length, savings: usd(Math.max(0, p.titles.length * POLICY_UNIT_PRICE - p.price)), includes: p.titles };
+}
+const policyTotal = POLICY_PACKS.reduce((a, p) => a + p.titles.length, 0);
+
 export const BUNDLES: Bundle[] = [
   // One hardening bundle: buying it unlocks unlimited on-demand generation of
   // CIS Benchmark and DISA STIG guides across every platform.
-  makePack("pk-stig-all", "Hardening Access — CIS & DISA", "One bundle, unlimited guides. Generate CIS Benchmark and DISA STIG hardening guides on demand across every platform — operating systems, network, databases, web, containers and virtualization.", Object.values(STIG_GROUPS).flat(), 30, true),
-  // Editable standards/policies packs (roadmap — CIS/NIST/PCI content, sold once licensed).
-  { id: "pk-std-all", family: "standards", framework: "PACK", name: "Complete Standards Suite", tagline: "Every editable policy, procedure and compliance program we publish.", price: "$7,900", count: 38, savings: "$70k", featured: true, includes: ["Governance Standards Pack", "NIST 800-53 Compliance Pack", "NIST 800-171 / CMMC Pack", "PCI DSS Compliance Pack", "All future additions for 12 months"] },
-  { id: "pk-std-gov", family: "standards", framework: "PACK", name: "Governance Standards Pack", tagline: "Policies + procedures for SCF, NIST CSF 2.0 and ISO 27001/27002.", price: "$2,990", count: 14, savings: "$26k", includes: ["Policies & Standards — Secure Controls Framework", "Policies & Standards — NIST CSF 2.0", "Policies & Standards — ISO 27001/27002", "Matching editable procedures", "Cybersecurity Business Plan (CBP)"] },
-  { id: "pk-std-nist", family: "standards", framework: "PACK", name: "NIST 800-53 Compliance Pack", tagline: "Moderate and high baselines with policies, procedures and SSP.", price: "$2,490", count: 9, savings: "$20k", includes: ["Policies & Standards — NIST 800-53 R5 (moderate)", "Policies & Standards — NIST 800-53 R5 (high)", "Matching editable procedures", "System Security Program (SSP)"] },
-  { id: "pk-std-171", family: "standards", framework: "PACK", name: "NIST 800-171 / CMMC Pack", tagline: "Everything to stand up an 800-171 / CMMC compliance program.", price: "$1,890", count: 6, savings: "$14k", includes: ["NIST 800-171 Compliance Program (NCP)", "NIST 800-171 System Security Program (SSP)", "Plan of Action & Milestones (POA&M) template"] },
-  { id: "pk-std-pci", family: "standards", framework: "PACK", name: "PCI DSS Compliance Pack", tagline: "Policies & standards for every PCI DSS v4 SAQ type.", price: "$2,290", count: 8, savings: "$16k", includes: ["PCI DSS v4 SAQ A / A-EP", "PCI DSS v4 SAQ B / B-IP", "PCI DSS v4 SAQ C / C-VT", "PCI DSS v4 SAQ D (Merchant & Service Provider)"] },
+  makePack("pk-stig-all", "Hardening Access — CIS & DISA", "One bundle, unlimited guides. Generate CIS Benchmark and DISA STIG hardening guides on demand across every platform — operating systems, network, databases, web, containers and virtualization.", Object.values(STIG_GROUPS).flat(), 1990, true),
+  // The complete base policy library (every pack below, plus every standard published later).
+  { id: "pk-std-all", family: "standards", framework: "PACK", name: "Complete Policy Library", tagline: "Every editable security policy we publish — governance, access, operations and resilience — mapped to NIST CSF 2.0, ISO 27001 and NIST 800-53.", price: usd(POLICY_SUITE_PRICE), count: policyTotal, savings: usd(policyTotal * POLICY_UNIT_PRICE - POLICY_SUITE_PRICE), featured: true, includes: [...POLICY_PACKS.map((p) => p.name), "Every policy and standard added in the future"] },
+  ...POLICY_PACKS.map(policyPack),
 ];
 
 export const DIRECTORY: Record<string, { cat: string; items: string[] }[]> = {
@@ -218,13 +235,8 @@ export const DIRECTORY: Record<string, { cat: string; items: string[] }[]> = {
     cat,
     items: ids.map((id) => _byId(id)?.name.replace(/^DISA STIG — /, "") || id),
   })),
-  standards: [
-    { cat: "Editable Policies & Standards", items: ["Secure Controls Framework (SCF)", "NIST CSF 2.0", "ISO 27001 / 27002", "NIST 800-53 R5 (moderate)", "NIST 800-53 R5 (high)", "CORE Fundamentals"] },
-    { cat: "Editable Procedures", items: ["Procedures — SCF", "Procedures — NIST CSF 2.0", "Procedures — ISO 27001/27002", "Procedures — NIST 800-53 R5"] },
-    { cat: "NIST 800-171 Compliance", items: ["800-171 Compliance Program (NCP)", "800-171 System Security Program (SSP)"] },
-    { cat: "PCI DSS Compliance", items: ["PCI DSS v4 SAQ A", "PCI DSS v4 SAQ A-EP", "PCI DSS v4 SAQ B / B-IP", "PCI DSS v4 SAQ C / C-VT", "PCI DSS v4 SAQ D (Merchant)", "PCI DSS v4 SAQ D (Service Provider)"] },
-    { cat: "Risk & Governance", items: ["Risk Management Program (RMP)", "Third-Party Risk Management (TPRM)", "Cybersecurity Risk Assessment (CRA)", "Continuity of Operations (COOP)"] },
-  ],
+  // Standards directory is the base policy library, grouped by pack.
+  standards: POLICY_PACKS.map((p) => ({ cat: p.name, items: p.titles })),
 };
 
 export const SAMPLE = [
