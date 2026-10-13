@@ -256,8 +256,8 @@ export async function appendBlocksToPdf(out: PDFDocument, blocks: Block[], color
     // A heading (plus intro paragraph) that introduces a wide table moves to the landscape page with it.
     if ((bl.t === "h1" || bl.t === "h2") && (isWide(blocks[i + 1]) || (blocks[i + 1]?.t === "p" && isWide(blocks[i + 2])))) newPage(true);
     switch (bl.t) {
-      case "h1": if (y < M + 60) newPage(); write(bl.text, { size: 15, font: bold, color: rgb(brand.r, brand.g, brand.b), gap: 8 }); break;
-      case "h2": write(bl.text, { size: 12, font: bold, gap: 4 }); break;
+      case "h1": y -= 8; if (y < M + 60) newPage(); write(bl.text, { size: 15, font: bold, color: rgb(brand.r, brand.g, brand.b), gap: 8 }); break;
+      case "h2": y -= 4; if (y < M + 40) newPage(); write(bl.text, { size: 12, font: bold, gap: 4 }); break;
       case "h3": write(bl.text, { size: 11, font: bold, color: rgb(brand.r, brand.g, brand.b), gap: 2 }); break;
       case "p": write(bl.text, { size: 10, color: muted, gap: 6 }); break;
       case "li": write(`-  ${bl.text}`, { size: 10, indent: 8, gap: 2 }); break;
@@ -293,6 +293,7 @@ export async function appendBlocksToPdf(out: PDFDocument, blocks: Block[], color
           });
           y -= h;
         };
+        if (y - 70 < M) newPage(); // keep the header row with at least the first data row
         drawRow(bl.headers, true);
         bl.rows.forEach((r) => drawRow(r, false));
         y -= 22; // clear the grid before the next heading's cap height

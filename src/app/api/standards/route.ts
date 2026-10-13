@@ -10,9 +10,9 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 // Library extras for the catalog card: document type, languages and the Spanish title.
-function libraryMeta(json: string): { docType: string | null; langs: string[]; titleEs: string | null } {
+function libraryMeta(json: string): { docType: string | null; langs: string[]; titleEs: string | null; summaryEs: string | null } {
   const c = parseContent(json);
-  return { docType: c.docType || null, langs: contentLangs(c), titleEs: c.translations?.es?.title || null };
+  return { docType: c.docType || null, langs: contentLangs(c), titleEs: c.translations?.es?.title || null, summaryEs: c.translations?.es?.summary || null };
 }
 
 // Public catalog of published, surfaced standards for the storefront (Frameworks).

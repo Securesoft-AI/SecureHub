@@ -32,9 +32,13 @@ npm run lint         # ESLint (next/core-web-vitals)
 
 Deployment to Railway is described in [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md).
 
-### Base policy library
+### Compliance document library
 
-`src/lib/policyLibrary/` holds 33 original, editable security policies (about 800 requirements) mapped to NIST CSF 2.0, ISO/IEC 27001:2022 and NIST SP 800-53, sold in four policy packs plus the Complete Policy Library (`src/lib/hub/data.ts`). `npm run db:seed` loads them; on a live deployment use **Admin › Catalog & pricing › Load base policy library** (or `POST /api/admin/standards/library`). Loading is idempotent and never overwrites a standard with the same title that the library did not create.
+`src/lib/policyLibrary/` holds 81 original documents in English and Spanish: 33 policies plus procedures, plans, registers, forms and templates. They are sold in seven framework bundles defined in `src/lib/policyLibrary/bundles.ts` (ISO 27001, NIS2, GDPR, ENS, DORA, SOC 2, Essentials), plus the Complete Compliance Library (`pk-std-all`). One document can belong to several bundles. Control and article IDs are cited; no standard's text is reproduced.
+
+- `npm run check:library` validates bundle membership, English/Spanish parity and table shapes.
+- `npm run db:seed` loads the library. On a live deployment, use **Admin › Catalog & pricing › Load base policy library** (or `POST /api/admin/standards/library`). Loading is idempotent: it refreshes library rows, re-applies bundle membership and skips same-titled standards it did not create.
+- Buyers generate a copy in English or Spanish with their organisation name and optional house-style template. No AI is involved at generation time.
 
 ### AI drafting (optional)
 

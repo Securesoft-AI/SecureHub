@@ -19,6 +19,7 @@ type PublishedStandard = {
   docType?: string | null;
   langs?: string[];
   titleEs?: string | null;
+  summaryEs?: string | null;
 };
 
 const TYPE_LABELS: Record<string, { en: string; es: string }> = {
@@ -133,13 +134,13 @@ export function Frameworks() {
             return (
               <div key={st.id} style={css("background:#FBFAF9;border:1px solid #E7E6E5;border-radius:18px;padding:18px 20px;display:flex;flex-direction:column;")}>
                 <div style={css("display:flex;gap:8px;align-items:center;margin-bottom:8px;")}>
-                  {st.platform ? <span style={css("font-size:11px;font-weight:600;color:#0f4c9c;background:#eaf0fb;padding:2px 8px;border-radius:999px;")}>{st.platform}</span> : null}
+                  {st.platform && !st.docType ? <span style={css("font-size:11px;font-weight:600;color:#0f4c9c;background:#eaf0fb;padding:2px 8px;border-radius:999px;")}>{st.platform}</span> : null}
                   {st.docType && TYPE_LABELS[st.docType] ? <span style={css("font-size:11px;font-weight:600;color:#6b4f12;background:#f6efe0;padding:2px 8px;border-radius:999px;")}>{TYPE_LABELS[st.docType][lang]}</span> : null}
                   {owned ? <span style={css("font-size:11px;font-weight:600;color:#1f7a4d;background:#e7f3ec;padding:2px 8px;border-radius:999px;")}>Owned</span> : null}
                   {st.langs && st.langs.length > 1 ? <span style={css("margin-left:auto;font-size:10.5px;font-weight:600;color:#79716B;")}>{st.langs.map((l) => l.toUpperCase()).join(" · ")}</span> : null}
                 </div>
                 <div style={css("font-size:16px;font-weight:700;letter-spacing:-.2px;margin-bottom:6px;line-height:1.3;")}>{lang === "es" && st.titleEs ? st.titleEs : st.title}</div>
-                <p style={css("margin:0 0 14px;color:#57534E;font-size:13px;line-height:1.55;flex:1;")}>{st.summary || "Editable policy standard."}</p>
+                <p style={css("margin:0 0 14px;color:#57534E;font-size:13px;line-height:1.55;flex:1;")}>{(lang === "es" && st.summaryEs) || st.summary || "Editable policy standard."}</p>
 
                 {owned ? (
                   genFor === st.id ? (

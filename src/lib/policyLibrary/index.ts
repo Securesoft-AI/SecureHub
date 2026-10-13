@@ -17,6 +17,7 @@ import { SOC2_DOCS } from "./docs/soc2";
 import { GDPR_DOCS } from "./docs/gdpr";
 import { ENS_A_DOCS } from "./docs/ens-a";
 import { ENS_B_DOCS } from "./docs/ens-b";
+import { NIS2_DORA_DOCS } from "./docs/nis2-dora";
 import type { LibraryDoc, LibraryPolicy, PolicyTranslations } from "./types";
 
 // Policies (structured model), English, plus their Spanish text keyed by docId.
@@ -24,6 +25,6 @@ export const POLICY_LIBRARY: LibraryPolicy[] = [...GOVERNANCE_POLICIES, ...ACCES
 export const POLICY_LIBRARY_ES: PolicyTranslations = { ...GOVERNANCE_POLICIES_ES, ...ACCESS_POLICIES_ES, ...OPERATIONS_POLICIES_ES, ...RESILIENCE_POLICIES_ES };
 
 // Procedures, plans, registers, forms and templates (free-form body), in both languages.
-export const LIBRARY_DOCS: LibraryDoc[] = [...CORE_A_DOCS, ...CORE_B_DOCS, ...ISO_A_DOCS, ...ISO_B_DOCS, ...GDPR_DOCS, ...ENS_A_DOCS, ...ENS_B_DOCS, ...SOC2_DOCS];
+export const LIBRARY_DOCS: LibraryDoc[] = [...CORE_A_DOCS, ...CORE_B_DOCS, ...ISO_A_DOCS, ...ISO_B_DOCS, ...GDPR_DOCS, ...ENS_A_DOCS, ...ENS_B_DOCS, ...NIS2_DORA_DOCS, ...SOC2_DOCS];
 
 export type { LibraryDoc, LibraryPolicy } from "./types";
