@@ -5,6 +5,8 @@
 // The AI only drafts the surrounding narrative (Purpose / Scope / Roles / Compliance).
 // The technical controls stay VERBATIM from the source benchmark elsewhere in the document.
 
+import { llmBody, llmHeaders } from "./llm";
+
 export type Role = { role: string; responsibilities: string[] };
 export type Narrative = {
   purposeIntro: string;
@@ -92,8 +94,6 @@ export function staticNarrative(p: PolicyInput): Narrative {
   };
 }
 
-const MODEL = process.env.POLICY_LLM_MODEL || "claude-opus-4-8";
-
 export function aiAvailable(): boolean {
   return !!process.env.ANTHROPIC_API_KEY;
 }
@@ -121,14 +121,10 @@ export async function aiNarrative(p: PolicyInput): Promise<Narrative | null> {
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-api-key": process.env.ANTHROPIC_API_KEY as string,
-        "anthropic-version": "2023-06-01",
-      },
+      headers: llmHeaders(),
       body: JSON.stringify({
-        model: MODEL,
-        max_tokens: 4096,
+        ...llmBody("low"),
+        max_tokens: 16000,
         system,
         messages: [{ role: "user", content: prompt }],
       }),
