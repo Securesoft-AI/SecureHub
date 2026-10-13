@@ -32,6 +32,10 @@ npm run lint         # ESLint (next/core-web-vitals)
 
 Deployment to Railway is described in [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md).
 
+### Base policy library
+
+`src/lib/policyLibrary/` holds 33 original, editable security policies (about 800 requirements) mapped to NIST CSF 2.0, ISO/IEC 27001:2022 and NIST SP 800-53, sold in four policy packs plus the Complete Policy Library (`src/lib/hub/data.ts`). `npm run db:seed` loads them; on a live deployment use **Admin › Catalog & pricing › Load base policy library** (or `POST /api/admin/standards/library`). Loading is idempotent and never overwrites a standard with the same title that the library did not create.
+
 ### AI drafting (optional)
 
 With `ANTHROPIC_API_KEY` set, Claude drafts the policy narrative and authors standards from a source URL (`src/lib/llm.ts`). The model defaults to `claude-sonnet-5-5` and can be changed with `POLICY_LLM_MODEL`. Without a key, a built-in static narrative is used.

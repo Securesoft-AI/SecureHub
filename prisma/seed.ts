@@ -7,6 +7,7 @@ import fs from "fs";
 import path from "path";
 import { WINDOWS_CONTROLS, ODP_TOKENS } from "../src/lib/hub/controlContent";
 import { PRODUCTS } from "../src/lib/hub/data";
+import { syncPolicyLibrary } from "../src/lib/policyLibrary/sync";
 
 type StigJson = {
   slug: string;
@@ -111,7 +112,10 @@ async function main() {
   await prisma.user.create({ data: { orgId: org.id, email: "m.torres@northwind.example", passwordHash: "seeded-no-login", name: "M. Torres", role: "customer", mfaEnabled: true } });
   await prisma.user.create({ data: { email: "admin@hardenhub.example", passwordHash: "seeded-no-login", name: "SecureHub Admin", role: "owner", mfaEnabled: true } });
 
-  const counts = { frameworks: frameworks.length, cisDemoControls: WINDOWS_CONTROLS.length, products: PRODUCTS.length };
+  // Base policy library (published standards sold in the policy packs).
+  const library = await syncPolicyLibrary(prisma);
+
+  const counts = { frameworks: frameworks.length, cisDemoControls: WINDOWS_CONTROLS.length, products: PRODUCTS.length, libraryPolicies: library.created + library.updated };
   console.log("Seed complete:", JSON.stringify(counts));
 }
 
