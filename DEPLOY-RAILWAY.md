@@ -1,5 +1,10 @@
 # Deploying SecureHub to Railway
 
+> **Automatic deploys from GitHub.** `.github/workflows/deploy-railway.yml` deploys every push to
+> `main` with the Railway CLI. It needs a Railway project token in the `RAILWAY_TOKEN` repository
+> secret and the app service name in the `RAILWAY_SERVICE` repository variable, and it does not
+> depend on which GitHub account Railway is linked to.
+
 SecureHub ships as a single **Docker image** (Node + Python `cis-bench`) and uses
 **PostgreSQL** for persistence. Generation is live — DISA works with no credentials;
 CIS needs your CIS WorkBench session.
