@@ -1,4 +1,4 @@
-// Seed the ControlForge/HardenHub database with a demo catalog grounded in the FRD data model.
+// Seed the SecureHub database with a demo catalog grounded in the FRD data model.
 // Content licensing (§11): CIS-derived products are marked MAP_ONLY and carry ORIGINAL text that
 // maps to the benchmark; NIST / DISA STIG are public-domain (VERBATIM_OK).
 
@@ -7,6 +7,7 @@ import fs from "fs";
 import path from "path";
 import { WINDOWS_CONTROLS, ODP_TOKENS } from "../src/lib/hub/controlContent";
 import { PRODUCTS } from "../src/lib/hub/data";
+import { syncPolicyLibrary } from "../src/lib/policyLibrary/sync";
 
 type StigJson = {
   slug: string;
@@ -109,9 +110,12 @@ async function main() {
   await prisma.coupon.create({ data: { code: "HARDEN25", type: "percent", value: 25, active: true } });
   const org = await prisma.organization.create({ data: { legalName: "Northwind Financial Group", tradeName: "Northwind", sector: "Financial services", taxId: "ESB12345678", country: "ES" } });
   await prisma.user.create({ data: { orgId: org.id, email: "m.torres@northwind.example", passwordHash: "seeded-no-login", name: "M. Torres", role: "customer", mfaEnabled: true } });
-  await prisma.user.create({ data: { email: "admin@hardenhub.example", passwordHash: "seeded-no-login", name: "HardenHub Admin", role: "owner", mfaEnabled: true } });
+  await prisma.user.create({ data: { email: "admin@hardenhub.example", passwordHash: "seeded-no-login", name: "SecureHub Admin", role: "owner", mfaEnabled: true } });
 
-  const counts = { frameworks: frameworks.length, cisDemoControls: WINDOWS_CONTROLS.length, products: PRODUCTS.length };
+  // Base policy library (published standards sold in the policy packs).
+  const library = await syncPolicyLibrary(prisma);
+
+  const counts = { frameworks: frameworks.length, cisDemoControls: WINDOWS_CONTROLS.length, products: PRODUCTS.length, libraryPolicies: library.created + library.updated };
   console.log("Seed complete:", JSON.stringify(counts));
 }
 

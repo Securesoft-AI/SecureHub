@@ -26,9 +26,9 @@ export function TopBar() {
   return (
     <header style={css(`height:62px;background:#FBFAF9;color:#1C1917;display:flex;align-items:center;position:sticky;top:0;z-index:50;border-bottom:1px solid #E7E6E5;${m ? "padding:0 12px;gap:10px;" : "padding:0 22px;gap:26px;"}`)}>
       <div style={css("display:flex;align-items:center;gap:9px;cursor:pointer;flex-shrink:0;")} onClick={() => go("storefront")}>
-        <div style={css("height:30px;width:30px;border-radius:7px;background:#0f4c9c;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-weight:700;font-size:16px;flex-shrink:0;")}>H</div>
+        <div style={css("height:30px;width:30px;border-radius:7px;background:#0f4c9c;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-weight:700;font-size:16px;flex-shrink:0;")}>S</div>
         {!m && <span style={css("font-family:'DM Sans',sans-serif;font-weight:700;font-size:18px;letter-spacing:-.01em;color:#1C1917;")}>
-          Harden<span style={{ color: "#0f4c9c" }}>Hub</span>
+          Secure<span style={{ color: "#0f4c9c" }}>Hub</span>
         </span>}
         {!m && <span style={css("font-size:10px;font-family:'Fragment Mono',monospace;color:#79716B;border:1px solid #E7E6E5;border-radius:20px;padding:2px 8px;margin-left:2px;")}>v0.1</span>}
       </div>

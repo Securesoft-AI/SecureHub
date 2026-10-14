@@ -1,5 +1,10 @@
 # Deploying SecureHub to Railway
 
+> **Automatic deploys from GitHub.** `.github/workflows/deploy-railway.yml` deploys every push to
+> `main` with the Railway CLI. It needs a Railway project token in the `RAILWAY_TOKEN` repository
+> secret and the app service name in the `RAILWAY_SERVICE` repository variable, and it does not
+> depend on which GitHub account Railway is linked to.
+
 SecureHub ships as a single **Docker image** (Node + Python `cis-bench`) and uses
 **PostgreSQL** for persistence. Generation is live — DISA works with no credentials;
 CIS needs your CIS WorkBench session.
@@ -7,8 +12,7 @@ CIS needs your CIS WorkBench session.
 ## One-time setup (≈3 minutes)
 
 1. **Create the project** — [railway.app](https://railway.app) → **New Project** →
-   **Deploy from GitHub repo** → pick `lander86-ship-it/compliance` and the branch
-   `claude/hardening-guides-ecommerce-p83y1v` (or `main` once merged).
+   **Deploy from GitHub repo** → pick `Securesoft-AI/SecureHub` and the branch `main`.
    Railway detects `railway.json` and builds the `Dockerfile`.
 
 2. **Add PostgreSQL** — in the project, **New** → **Database** → **PostgreSQL**.

@@ -8,12 +8,12 @@
 
 import { staticNarrative, type Narrative, type Role } from "./policyNarrative";
 import type { ReqSection } from "./standardDoc";
+import { llmBody, llmHeaders } from "./llm";
 
-const MODEL = process.env.POLICY_LLM_MODEL || "claude-opus-4-8";
 const CHUNK_CHARS = 24_000;   // ~6k tokens of source per extraction call — safe against output truncation
 const MAX_CHUNKS = 14;        // cover up to ~336k chars of source (a large framework/STIG)
 const CONCURRENCY = 4;        // parallel model calls, bounded to avoid rate spikes
-const MAX_OUTPUT_TOKENS = 16_000;
+const MAX_OUTPUT_TOKENS = 32_000;  // room for adaptive thinking plus the extracted JSON
 
 // Raised when the model call itself fails; a missing API key returns null instead.
 export class AuthorError extends Error {}
@@ -63,8 +63,8 @@ async function callClaude(system: string, user: string): Promise<{ text: string;
   try {
     res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: { "content-type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY as string, "anthropic-version": "2023-06-01" },
-      body: JSON.stringify({ model: MODEL, max_tokens: MAX_OUTPUT_TOKENS, system, messages: [{ role: "user", content: user }] }),
+      headers: llmHeaders(),
+      body: JSON.stringify({ ...llmBody("medium"), max_tokens: MAX_OUTPUT_TOKENS, system, messages: [{ role: "user", content: user }] }),
       signal: AbortSignal.timeout(240_000),
     });
   } catch (e) {

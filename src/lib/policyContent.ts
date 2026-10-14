@@ -16,6 +16,8 @@ export type PolicyMeta = {
   platform: string;
   benchTitle: string;
   benchVersion: string;
+  lang?: "en" | "es"; // label language for the cover and version table (default English)
+  subtitle?: string; // replaces the "Operationalises: <benchmark>" cover line
 };
 
 export type Block =
@@ -25,7 +27,16 @@ export type Block =
   | { t: "p"; text: string }
   | { t: "li"; text: string }
   | { t: "kv"; label: string; text: string }
-  | { t: "role"; role: string; resp: string[] };
+  | { t: "role"; role: string; resp: string[] }
+  | { t: "step"; n: number; text: string } // numbered procedure step
+  | { t: "table"; headers: string[]; rows: string[][] } // register / matrix; "" cells stay blank
+  | { t: "field"; label: string; hint?: string }; // form field followed by a line to fill in
+
+// Cover and version-table labels, per language.
+export const DOC_LABELS = {
+  en: { operationalises: "Operationalises", classification: "Classification", version: "Version", date: "Date", owner: "Owner", versionHistory: "Version history", author: "Author", description: "Description", initialIssue: "Initial issue", preparedFor: "Prepared for" },
+  es: { operationalises: "Desarrolla", classification: "Clasificación", version: "Versión", date: "Fecha", owner: "Propietario", versionHistory: "Historial de versiones", author: "Autor", description: "Descripción", initialIssue: "Versión inicial", preparedFor: "Preparado para" },
+} as const;
 
 function sections(controls: FullControl[]): { title: string; controls: FullControl[] }[] {
   const order: string[] = [];

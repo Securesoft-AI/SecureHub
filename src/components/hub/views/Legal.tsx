@@ -6,7 +6,7 @@ import { css } from "@/lib/hub/theme";
 
 // Static legal pages (Terms, Privacy) — GDPR / LOPDGDD oriented for an EU/Spain business.
 // Company specifics are read from env-injected globals where available, with safe defaults.
-const COMPANY = "HardenHub";
+const COMPANY = "SecureHub";
 const CONTACT = "privacy@hardenhub.app";
 const UPDATED = "13 August 2026";
 

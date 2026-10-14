@@ -1,4 +1,4 @@
-// ControlForge / HardenHub — document generation engine (§7, FR-G-01..05, FR-C-23..25).
+// SecureHub — document generation engine (§7, FR-G-01..05, FR-C-23..25).
 // Combines Product controls + customer Scope + Branding into DOCX / PDF / XLSX artifacts,
 // embeds a watermark + license id, computes a verifiable sha256 hash, and stores the file.
 
@@ -145,7 +145,7 @@ async function buildDocx(input: GenInput, rows: ResolvedRow[], meta: DocMeta, li
   ];
 
   const doc = new Document({
-    creator: "HardenHub",
+    creator: "SecureHub",
     title: meta.title,
     description: `License ${licenseId}`,
     sections: [
@@ -191,7 +191,7 @@ async function buildPdf(input: GenInput, rows: ResolvedRow[], meta: DocMeta, lic
   let y = HEIGHT - MARGIN;
 
   const watermark = (p: typeof page) => {
-    p.drawText("HARDENHUB", { x: 90, y: 380, size: 60, font: bold, color: rgb(brand.r, brand.g, brand.b), opacity: 0.05, rotate: degrees(-20) });
+    p.drawText("SECUREHUB", { x: 90, y: 380, size: 60, font: bold, color: rgb(brand.r, brand.g, brand.b), opacity: 0.05, rotate: degrees(-20) });
     p.drawText(licenseId, { x: MARGIN, y: 28, size: 8, font, color: muted });
     p.drawText(input.scope.classification, { x: WIDTH - MARGIN - font.widthOfTextAtSize(input.scope.classification, 8), y: 28, size: 8, font, color: muted });
   };
@@ -277,7 +277,7 @@ async function buildPdf(input: GenInput, rows: ResolvedRow[], meta: DocMeta, lic
 // ─────────────────────────── XLSX ───────────────────────────
 async function buildXlsx(input: GenInput, rows: ResolvedRow[], meta: DocMeta, licenseId: string, generatedAt: string): Promise<Buffer> {
   const wb = new ExcelJS.Workbook();
-  wb.creator = "HardenHub";
+  wb.creator = "SecureHub";
 
   const cover = wb.addWorksheet("Summary");
   cover.columns = [{ width: 26 }, { width: 70 }];

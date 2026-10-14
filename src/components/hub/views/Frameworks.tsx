@@ -10,11 +10,25 @@ type PublishedStandard = {
   platform: string | null;
   summary: string | null;
   sourceUrl: string | null;
-  bundleId: string | null;
+  bundleId: string | null; // cheapest bundle that includes it
+  bundles?: { id: string; name: string; price: string }[];
   bundleName: string | null;
   bundlePrice: string | null;
   priceCents: number | null;
   owned: boolean;
+  docType?: string | null;
+  langs?: string[];
+  titleEs?: string | null;
+  summaryEs?: string | null;
+};
+
+const TYPE_LABELS: Record<string, { en: string; es: string }> = {
+  policy: { en: "Policy", es: "Política" },
+  procedure: { en: "Procedure", es: "Procedimiento" },
+  plan: { en: "Plan", es: "Plan" },
+  register: { en: "Register", es: "Registro" },
+  form: { en: "Form", es: "Formulario" },
+  template: { en: "Template", es: "Plantilla" },
 };
 
 // Storefront catalog of published policy standards. Buyers purchase the assigned bundle,
@@ -27,6 +41,10 @@ export function Frameworks() {
   const [legal, setLegal] = React.useState("");
   const [busy, setBusy] = React.useState(false);
   const [msg, setMsg] = React.useState<{ id: string; text: string; ok: boolean } | null>(null);
+  // Document language (also used for the generated copy) and catalog filters.
+  const [lang, setLang] = React.useState<"en" | "es">("en");
+  const [bundleFilter, setBundleFilter] = React.useState<string>("");
+  const [typeFilter, setTypeFilter] = React.useState<string>("");
 
   const load = React.useCallback(() => {
     fetch("/api/standards")
@@ -39,7 +57,7 @@ export function Frameworks() {
   // Client-side ownership so the card reacts to purchases made this session.
   const ent = s.entitlements;
   const isOwned = (st: PublishedStandard) =>
-    st.owned || s.entAdmin || !!(st.bundleId && ent && (ent.bundleIds.includes(st.bundleId) || ent.bundleIds.includes("pk-std-all")));
+    st.owned || s.entAdmin || !!(ent && ((st.bundles || []).some((b) => ent.bundleIds.includes(b.id)) || (st.bundleId && ent.bundleIds.includes("pk-std-all"))));
 
   const buy = (st: PublishedStandard) => {
     if (!st.bundleId) return;
@@ -55,7 +73,7 @@ export function Frameworks() {
       const r = await fetch(`/api/standards/${st.id}/generate`, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ legal: legal.trim() }),
+        body: JSON.stringify({ legal: legal.trim(), lang: (st.langs || ["en"]).includes(lang) ? lang : "en" }),
       });
       const d = await r.json().catch(() => ({}));
       if (!r.ok) { setMsg({ id: st.id, text: d.error || "Generation failed.", ok: false }); setBusy(false); return; }
@@ -68,6 +86,16 @@ export function Frameworks() {
       setBusy(false);
     }
   };
+
+  const bundleOptions = React.useMemo(() => {
+    const seen = new Map<string, string>();
+    (items || []).forEach((st) => (st.bundles || []).forEach((b) => seen.set(b.id, b.name)));
+    return [...seen].map(([id, name]) => ({ id, name }));
+  }, [items]);
+  const visible = (items || []).filter(
+    (st) => (!bundleFilter || (st.bundles || []).some((b) => b.id === bundleFilter)) && (!typeFilter || st.docType === typeFilter),
+  );
+  const selectCss = "border:1px solid #E7E6E5;border-radius:999px;padding:7px 12px;font-size:12.5px;background:#fff;color:#1C1917;";
 
   return (
     <div style={css(`max-width:1180px;${m ? "padding:20px 16px 48px;" : "padding:26px 34px 60px;"}`)}>
@@ -83,17 +111,36 @@ export function Frameworks() {
           <button onClick={() => go("bundles")} style={css("background:#fff;color:#0f4c9c;border:1px solid #c3d2ea;border-radius:999px;padding:10px 20px;font-size:13.5px;font-weight:600;cursor:pointer;")}>Browse bundles instead</button>
         </div>
       ) : (
+        <>
+        <div style={css("display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:18px;")}>
+          <select value={bundleFilter} onChange={(e) => setBundleFilter(e.target.value)} style={css(selectCss)}>
+            <option value="">{lang === "es" ? "Todos los bundles" : "All bundles"}</option>
+            {bundleOptions.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
+          </select>
+          <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} style={css(selectCss)}>
+            <option value="">{lang === "es" ? "Todos los tipos" : "All document types"}</option>
+            {Object.entries(TYPE_LABELS).map(([k, v]) => <option key={k} value={k}>{v[lang]}</option>)}
+          </select>
+          <div style={css("margin-left:auto;display:flex;border:1px solid #E7E6E5;border-radius:999px;overflow:hidden;")}>
+            {(["en", "es"] as const).map((l) => (
+              <button key={l} onClick={() => setLang(l)} style={css(`border:none;padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer;background:${lang === l ? "#0f4c9c" : "#fff"};color:${lang === l ? "#fff" : "#57534E"};`)}>{l === "en" ? "English" : "Español"}</button>
+            ))}
+          </div>
+          <span style={css("font-size:12px;color:#79716B;width:100%;")}>{visible.length} {lang === "es" ? "documentos" : "documents"}</span>
+        </div>
         <div style={css(`display:grid;grid-template-columns:${m ? "1fr" : "repeat(auto-fill,minmax(340px,1fr))"};gap:16px;`)}>
-          {items.map((st) => {
+          {visible.map((st) => {
             const owned = isOwned(st);
             return (
               <div key={st.id} style={css("background:#FBFAF9;border:1px solid #E7E6E5;border-radius:18px;padding:18px 20px;display:flex;flex-direction:column;")}>
                 <div style={css("display:flex;gap:8px;align-items:center;margin-bottom:8px;")}>
-                  {st.platform ? <span style={css("font-size:11px;font-weight:600;color:#0f4c9c;background:#eaf0fb;padding:2px 8px;border-radius:999px;")}>{st.platform}</span> : null}
+                  {st.platform && !st.docType ? <span style={css("font-size:11px;font-weight:600;color:#0f4c9c;background:#eaf0fb;padding:2px 8px;border-radius:999px;")}>{st.platform}</span> : null}
+                  {st.docType && TYPE_LABELS[st.docType] ? <span style={css("font-size:11px;font-weight:600;color:#6b4f12;background:#f6efe0;padding:2px 8px;border-radius:999px;")}>{TYPE_LABELS[st.docType][lang]}</span> : null}
                   {owned ? <span style={css("font-size:11px;font-weight:600;color:#1f7a4d;background:#e7f3ec;padding:2px 8px;border-radius:999px;")}>Owned</span> : null}
+                  {st.langs && st.langs.length > 1 ? <span style={css("margin-left:auto;font-size:10.5px;font-weight:600;color:#79716B;")}>{st.langs.map((l) => l.toUpperCase()).join(" · ")}</span> : null}
                 </div>
-                <div style={css("font-size:16px;font-weight:700;letter-spacing:-.2px;margin-bottom:6px;line-height:1.3;")}>{st.title}</div>
-                <p style={css("margin:0 0 14px;color:#57534E;font-size:13px;line-height:1.55;flex:1;")}>{st.summary || "Editable policy standard."}</p>
+                <div style={css("font-size:16px;font-weight:700;letter-spacing:-.2px;margin-bottom:6px;line-height:1.3;")}>{lang === "es" && st.titleEs ? st.titleEs : st.title}</div>
+                <p style={css("margin:0 0 14px;color:#57534E;font-size:13px;line-height:1.55;flex:1;")}>{(lang === "es" && st.summaryEs) || st.summary || "Editable policy standard."}</p>
 
                 {owned ? (
                   genFor === st.id ? (
@@ -131,6 +178,7 @@ export function Frameworks() {
             );
           })}
         </div>
+        </>
       )}
     </div>
   );

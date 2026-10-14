@@ -49,7 +49,7 @@ export async function POST(req: Request) {
 
   let html = "";
   try {
-    const res = await fetch(url, { headers: { "user-agent": "Mozilla/5.0 HardenHubBot", accept: "text/html,*/*" }, signal: AbortSignal.timeout(30000) });
+    const res = await fetch(url, { headers: { "user-agent": "Mozilla/5.0 SecureHubBot", accept: "text/html,*/*" }, signal: AbortSignal.timeout(30000) });
     if (!res.ok) return NextResponse.json({ error: `Could not fetch the source (HTTP ${res.status}).` }, { status: 502 });
     html = await res.text();
   } catch (e) {

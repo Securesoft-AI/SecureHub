@@ -1,30 +1,48 @@
-# HardenHub
+# SecureHub
 
 E-commerce platform for **security hardening guides and standards** (CIS Benchmarks, DISA STIG, NIST) with per-customer customization and a real **document-generation engine** (DOCX / PDF / XLSX).
 
 Built from the FRD (v0.1) and the `HardenHub.dc.html` design. This is the **MVP (Phase 1)** vertical slice, implemented as a Next.js app with a working generation backend.
 
-> Branding follows the design file (**HardenHub**). Package/DB name is `controlforge` — trivial to rename.
+> Originally prototyped as **HardenHub** (the design file name); the product is now branded **SecureHub**.
 
 ## Stack
 
 | Layer | Choice |
 |---|---|
 | Framework | Next.js 14 (App Router, TypeScript) |
-| Data | Prisma + SQLite (`prisma/schema.prisma` maps §9 of the FRD) |
+| Runtime | Node.js 22 (`.nvmrc`) |
+| Data | Prisma + PostgreSQL (`prisma/schema.prisma` maps §9 of the FRD) |
 | UI | React + ported design system (`src/lib/hub/theme.ts` `css()` helper) |
 | Generation | `docx` · `pdf-lib` · `exceljs` |
 | Payments | Stripe-ready (stub checkout in the UI) |
 
 ## Quick start
 
+Requires Node 22 and a PostgreSQL database.
+
 ```bash
 npm install
-cp .env.example .env
-npm run db:push      # create SQLite schema
+cp .env.example .env # then set DATABASE_URL to your Postgres instance
+npm run db:push      # create the schema
 npm run db:seed      # seed frameworks, controls, mappings, products, coupon, demo org
 npm run dev          # http://localhost:3000
+npm run lint         # ESLint (next/core-web-vitals)
 ```
+
+Deployment to Railway is described in [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md).
+
+### Compliance document library
+
+`src/lib/policyLibrary/` holds 81 original documents in English and Spanish: 33 policies plus procedures, plans, registers, forms and templates. They are sold in seven framework bundles defined in `src/lib/policyLibrary/bundles.ts` (ISO 27001, NIS2, GDPR, ENS, DORA, SOC 2, Essentials), plus the Complete Compliance Library (`pk-std-all`). One document can belong to several bundles. Control and article IDs are cited; no standard's text is reproduced.
+
+- `npm run check:library` validates bundle membership, English/Spanish parity and table shapes.
+- `npm run db:seed` loads the library. On a live deployment, use **Admin › Catalog & pricing › Load base policy library** (or `POST /api/admin/standards/library`). Loading is idempotent: it refreshes library rows, re-applies bundle membership and skips same-titled standards it did not create.
+- Buyers generate a copy in English or Spanish with their organisation name and optional house-style template. No AI is involved at generation time.
+
+### AI drafting (optional)
+
+With `ANTHROPIC_API_KEY` set, Claude drafts the policy narrative and authors standards from a source URL (`src/lib/llm.ts`). The model defaults to `claude-sonnet-5-5` and can be changed with `POLICY_LLM_MODEL`. Without a key, a built-in static narrative is used.
 
 ## What's implemented
 

@@ -13,6 +13,7 @@ import { PDFDocument, StandardFonts, rgb, type PDFFont } from "pdf-lib";
 import type { FullControl } from "./hub/controlContent";
 import type { Narrative } from "./policyNarrative";
 import { policyBlocks, type PolicyMeta, type Block } from "./policyContent";
+import { WIDE_TABLE_COLS } from "./policy";
 
 export const TEMPLATE_PLACEHOLDERS = [
   "{{POLICY_BODY}}", "{{ORG}}", "{{TITLE}}", "{{VERSION}}", "{{DATE}}",
@@ -71,9 +72,26 @@ function blocksToOoxml(blocks: Block[], brand: string): string {
         out.push(para(run(bl.role, { bold: true, color: brand })));
         bl.resp.forEach((r) => out.push(para(run(`•\t${r}`))));
         break;
+      case "step": out.push(para(`${run(`${bl.n}.\t`, { bold: true, color: brand })}${run(bl.text)}`)); break;
+      case "table": out.push(tableOoxml(bl.headers, bl.rows, brand), para("")); break;
+      case "field":
+        out.push(para(`${run(bl.label, { bold: true })}${bl.hint ? run(`  (${bl.hint})`, { color: "79716B" }) : ""}`));
+        out.push(`<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="4" w:space="1" w:color="A8A29E"/></w:pBdr></w:pPr>${run(" ")}</w:p>`);
+        break;
     }
   }
   return out.join("");
+}
+
+// A full-width bordered table with a brand-coloured header row (repeated on each page).
+function tableOoxml(headers: string[], rows: string[][], brand: string): string {
+  const size = headers.length > 6 ? 14 : 17;
+  const border = (side: string) => `<w:${side} w:val="single" w:sz="4" w:space="0" w:color="D6D3D1"/>`;
+  const cell = (text: string, header: boolean) =>
+    `<w:tc><w:tcPr>${header ? `<w:shd w:val="clear" w:color="auto" w:fill="${brand}"/>` : ""}</w:tcPr><w:p>${run(text, header ? { bold: true, color: "FFFFFF", size } : { size })}</w:p></w:tc>`;
+  const head = `<w:tr><w:trPr><w:tblHeader/></w:trPr>${headers.map((h) => cell(h, true)).join("")}</w:tr>`;
+  const body = rows.map((r) => `<w:tr>${headers.map((_, i) => cell(r[i] ?? "", false)).join("")}</w:tr>`).join("");
+  return `<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/><w:tblBorders>${["top", "left", "bottom", "right", "insideH", "insideV"].map(border).join("")}</w:tblBorders></w:tblPr><w:tblGrid>${headers.map(() => "<w:gridCol/>").join("")}</w:tblGrid>${head}${body}</w:tbl>`;
 }
 
 // ─────────────────────────── DOCX healing ───────────────────────────
@@ -196,12 +214,22 @@ export async function injectBlocksIntoPdf(
   }
 
   // 2) Append the generated policy content as fresh pages.
+  await appendBlocksToPdf(out, blocks, colorHex);
+  const bytes = await out.save();
+  return Buffer.from(bytes);
+}
+
+// Render a Block[] onto new A4 pages at the end of `out` (used for templated and built-in PDFs).
+export async function appendBlocksToPdf(out: PDFDocument, blocks: Block[], colorHex: string): Promise<void> {
   const font = await out.embedFont(StandardFonts.Helvetica);
   const bold = await out.embedFont(StandardFonts.HelveticaBold);
   const brand = hexToRgb(colorHex || "#0f4c9c");
   const ink = rgb(0.11, 0.1, 0.09);
   const muted = rgb(0.34, 0.33, 0.31);
   const M = 56, W = 595.28, H = 841.89;
+  // Current page geometry: portrait, or landscape while a wide table is being drawn.
+  let PW = W, PH = H;
+  const newPage = (landscape = PW > PH) => { [PW, PH] = landscape ? [H, W] : [W, H]; page = out.addPage([PW, PH]); y = PH - M; };
   let page = out.addPage([W, H]);
   let y = H - M;
 
@@ -215,27 +243,65 @@ export async function injectBlocksIntoPdf(
   };
   const write = (t: string, o: { size?: number; font?: PDFFont; color?: ReturnType<typeof rgb>; gap?: number; indent?: number } = {}) => {
     const size = o.size ?? 10, f = o.font ?? font, x = M + (o.indent ?? 0);
-    for (const ln of wrap(t, f, size, W - M * 2 - (o.indent ?? 0))) {
-      if (y < M + 24) { page = out.addPage([W, H]); y = H - M; }
+    for (const ln of wrap(t, f, size, PW - M * 2 - (o.indent ?? 0))) {
+      if (y < M + 24) newPage();
       page.drawText(ln, { x, y, size, font: f, color: o.color ?? ink }); y -= size + 4;
     }
     y -= o.gap ?? 0;
   };
 
-  for (const bl of blocks) {
+  const isWide = (b: Block | undefined) => !!b && b.t === "table" && b.headers.length > WIDE_TABLE_COLS;
+  for (let i = 0; i < blocks.length; i++) {
+    const bl = blocks[i];
+    // A heading (plus intro paragraph) that introduces a wide table moves to the landscape page with it.
+    if ((bl.t === "h1" || bl.t === "h2") && (isWide(blocks[i + 1]) || (blocks[i + 1]?.t === "p" && isWide(blocks[i + 2])))) newPage(true);
     switch (bl.t) {
-      case "h1": if (y < M + 60) { page = out.addPage([W, H]); y = H - M; } write(bl.text, { size: 15, font: bold, color: rgb(brand.r, brand.g, brand.b), gap: 8 }); break;
-      case "h2": write(bl.text, { size: 12, font: bold, gap: 4 }); break;
+      case "h1": y -= 8; if (y < M + 60) newPage(); write(bl.text, { size: 15, font: bold, color: rgb(brand.r, brand.g, brand.b), gap: 8 }); break;
+      case "h2": y -= 4; if (y < M + 40) newPage(); write(bl.text, { size: 12, font: bold, gap: 4 }); break;
       case "h3": write(bl.text, { size: 11, font: bold, color: rgb(brand.r, brand.g, brand.b), gap: 2 }); break;
       case "p": write(bl.text, { size: 10, color: muted, gap: 6 }); break;
       case "li": write(`-  ${bl.text}`, { size: 10, indent: 8, gap: 2 }); break;
       case "kv": write(`${bl.label}. ${bl.text}`, { size: 10, indent: 8, gap: 2 }); break;
       case "role": write(bl.role, { size: 11, font: bold, gap: 2 }); bl.resp.forEach((r) => write(`-  ${r}`, { size: 10, indent: 8, gap: 2 })); break;
+      case "step": write(`${bl.n}.  ${bl.text}`, { size: 10, indent: 8, gap: 3 }); break;
+      case "field": {
+        write(bl.hint ? `${bl.label}  (${bl.hint})` : bl.label, { size: 10, font: bold, gap: 2 });
+        if (y < M + 24) newPage();
+        y -= 10;
+        page.drawLine({ start: { x: M, y }, end: { x: PW - M, y }, thickness: 0.6, color: rgb(0.66, 0.64, 0.62) });
+        y -= 12;
+        break;
+      }
+      case "table": {
+        // Wrapped-cell grid; the header row repeats after each page break. Wide tables are
+        // drawn on landscape pages, then the text continues on a new portrait page.
+        const cols = bl.headers.length;
+        const wide = cols > WIDE_TABLE_COLS;
+        if (wide && PW < PH) newPage(true);
+        const pw = PW;
+        const size = cols > 10 ? 7 : cols > 5 ? 7.5 : 8.5;
+        const colW = (pw - M * 2) / cols, pad = 3, lineH = size + 2.5;
+        const cellLines = (row: string[], f: PDFFont) => bl.headers.map((_, i) => (row[i] ? wrap(row[i], f, size, colW - pad * 2) : [""]));
+        const drawRow = (row: string[], header: boolean) => {
+          const lines = cellLines(row, header ? bold : font);
+          const h = Math.max(...lines.map((l) => l.length)) * lineH + pad * 2;
+          if (y - h < M) { newPage(); if (!header) drawRow(bl.headers, true); }
+          lines.forEach((ls, i) => {
+            const x = M + i * colW;
+            page.drawRectangle({ x, y: y - h, width: colW, height: h, borderColor: rgb(0.84, 0.83, 0.82), borderWidth: 0.5, color: header ? rgb(brand.r, brand.g, brand.b) : undefined });
+            ls.forEach((ln, j) => page.drawText(ln, { x: x + pad, y: y - pad - size - j * lineH + 1, size, font: header ? bold : font, color: header ? rgb(1, 1, 1) : ink }));
+          });
+          y -= h;
+        };
+        if (y - 70 < M) newPage(); // keep the header row with at least the first data row
+        drawRow(bl.headers, true);
+        bl.rows.forEach((r) => drawRow(r, false));
+        y -= 22; // clear the grid before the next heading's cap height
+        if (wide) newPage(false);
+        break;
+      }
     }
   }
-
-  const bytes = await out.save();
-  return Buffer.from(bytes);
 }
 
 function hexToRgb(hex: string): { r: number; g: number; b: number } {

@@ -34,6 +34,7 @@ const patch = z.object({
   publish: z.boolean().optional(),
   hidden: z.boolean().optional(),
   bundleId: z.string().max(60).nullable().optional(),
+  bundleIds: z.array(z.string().max(60)).max(30).optional(),
   priceCents: z.number().int().min(0).nullable().optional(),
   content: contentSchema.optional(),
 });
@@ -51,6 +52,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   if (v.publish === true) { data.status = "published"; data.hidden = true; } // published but hidden until surfaced
   if (typeof v.hidden === "boolean") data.hidden = v.hidden;
   if (v.bundleId !== undefined) data.bundleId = v.bundleId;
+  if (v.bundleIds !== undefined) { data.bundleIds = JSON.stringify(v.bundleIds); data.bundleId = v.bundleIds[0] ?? null; }
   if (v.priceCents !== undefined) data.priceCents = v.priceCents;
 
   // Edit the drafted body: merge the provided narrative/section fields into stored content.

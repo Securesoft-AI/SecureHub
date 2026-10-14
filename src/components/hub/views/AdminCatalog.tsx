@@ -71,7 +71,7 @@ function BundleEditor({ b, onClose, onSaved }: { b: Editing; onClose: () => void
   );
 }
 
-type Std = { id: string; title: string; status: string; hidden: boolean; bundleId: string | null; priceCents: number | null; platform: string | null };
+type Std = { id: string; title: string; status: string; hidden: boolean; bundleId: string | null; bundleIds: string[]; priceCents: number | null; platform: string | null };
 
 function StandardsSection({ bundles }: { bundles: Bundle[] }) {
   const [list, setList] = useState<Std[] | null>(null);
@@ -79,11 +79,29 @@ function StandardsSection({ bundles }: { bundles: Bundle[] }) {
   useEffect(() => { load(); }, []);
   const patch = async (id: string, body: Record<string, unknown>) => { await fetch(`/api/admin/standards/${id}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }); load(); };
   const input = "padding:7px 9px;border:1px solid #E7E6E5;border-radius:7px;font-size:12.5px;background:#fff;outline:none;";
+  const [syncing, setSyncing] = useState(false);
+  const [syncMsg, setSyncMsg] = useState<string | null>(null);
+  const syncLibrary = async () => {
+    setSyncing(true);
+    setSyncMsg(null);
+    try {
+      const r = await fetch("/api/admin/standards/library", { method: "POST" });
+      const d = await r.json().catch(() => ({}));
+      setSyncMsg(r.ok ? `Policy library loaded: ${d.created} new, ${d.updated} updated${d.skipped ? `, ${d.skipped} skipped (a standard with the same title already exists)` : ""}.` : d.error || `Failed (${r.status})`);
+      load();
+    } finally {
+      setSyncing(false);
+    }
+  };
 
   return (
     <div style={css("margin-top:34px;")}>
-      <h2 style={css("margin:0 0 4px;font-size:18px;font-weight:700;")}>Published standards &amp; policies</h2>
-      <p style={css("margin:0 0 14px;color:#57534E;font-size:13px;")}>Standards created in the AI Generator. Assign each to a bundle, set a price, edit the title, or hide it from clients.</p>
+      <div style={css("display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px;")}>
+        <h2 style={css("margin:0;font-size:18px;font-weight:700;")}>Published standards &amp; policies</h2>
+        <button onClick={syncLibrary} disabled={syncing} style={css("background:#fff;border:1px solid #E7E6E5;color:#0f4c9c;border-radius:999px;padding:8px 14px;font-size:12.5px;font-weight:600;cursor:pointer;")}>{syncing ? "Loading…" : "Load base policy library"}</button>
+      </div>
+      <p style={css("margin:0 0 14px;color:#57534E;font-size:13px;")}>Standards created in the AI Generator or loaded from the base policy library. Assign each to a bundle, set a price, edit the title, or hide it from clients.</p>
+      {syncMsg && <div style={css("font-size:13px;color:#186340;margin-bottom:12px;")}>{syncMsg}</div>}
       {list === null ? (
         <div style={css("color:#79716B;font-size:14px;")}>Loading…</div>
       ) : list.length === 0 ? (
@@ -97,10 +115,17 @@ function StandardsSection({ bundles }: { bundles: Bundle[] }) {
             <div key={st.id} style={css("display:grid;grid-template-columns:1.6fr 1.2fr 90px 110px 90px;padding:12px 18px;border-bottom:1px solid #EFEEEC;font-size:13px;align-items:center;gap:8px;")}>
               <div style={css("font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;")}>{st.title}</div>
               <div>
-                <select value={st.bundleId || ""} onChange={(e) => patch(st.id, { bundleId: e.target.value || null })} style={css(input + "width:100%;")}>
-                  <option value="">— none —</option>
-                  {bundles.filter((b) => b.family === "standards").map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
-                </select>
+                <div style={css("display:flex;flex-wrap:wrap;gap:4px;")}>
+                  {bundles.filter((b) => b.family === "standards" && b.id !== "pk-std-all").map((b) => {
+                    const on = (st.bundleIds || []).includes(b.id);
+                    const next = on ? st.bundleIds.filter((x) => x !== b.id) : [...(st.bundleIds || []), b.id];
+                    return (
+                      <span key={b.id} title={b.name} onClick={() => patch(st.id, { bundleIds: next })} style={css(`cursor:pointer;font-size:10.5px;font-weight:600;border-radius:20px;padding:3px 8px;border:1px solid ${on ? "#0f4c9c" : "#E7E6E5"};background:${on ? "#e8eef8" : "#fff"};color:${on ? "#0f4c9c" : "#79716B"};`)}>
+                        {b.name.replace(/ (Starter Kit|Compliance Pack|Readiness|Pack)$/, "")}
+                      </span>
+                    );
+                  })}
+                </div>
               </div>
               <div>
                 <input defaultValue={st.priceCents != null ? String(st.priceCents / 100) : ""} placeholder="$" onBlur={(e) => { const n = e.target.value.trim() ? Math.round(parseFloat(e.target.value) * 100) : null; patch(st.id, { priceCents: n }); }} style={css(input + "width:70px;")} />

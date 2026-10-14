@@ -64,7 +64,7 @@ export function Checkout() {
             {s.pay === "card" ? (
               <div style={css("border:1px solid #E7E6E5;border-radius:9px;padding:16px;background:#FBFAF9;")}>
                 <div style={css("display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:12px;color:#57534E;")}>
-                  <span style={css("font-family:'Fragment Mono',monospace;font-weight:600;color:#635bff;")}>stripe</span> · secured payment — HardenHub stores no card data
+                  <span style={css("font-family:'Fragment Mono',monospace;font-weight:600;color:#635bff;")}>stripe</span> · secured payment — SecureHub stores no card data
                 </div>
                 <div style={css("background:#FBFAF9;border:1px solid #E7E6E5;border-radius:7px;padding:12px 14px;font-family:'Fragment Mono',monospace;font-size:13.5px;color:#57534E;display:flex;justify-content:space-between;")}>
                   4242 4242 4242 4242 <span style={css("color:#79716B;")}>12/28 · 123</span>

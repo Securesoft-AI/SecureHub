@@ -1,0 +1,40 @@
+# Deploy to Railway on every push to main (and on demand), using the Railway CLI with a
+# project token. This does not need Railway's GitHub app to have access to this repository.
+#
+# Setup (once):
+#   1. Railway: Project → Settings → Tokens → create a token for the production environment.
+#   2. GitHub: Settings → Secrets and variables → Actions:
+#        - Secret   RAILWAY_TOKEN   = the token from step 1
+#        - Variable RAILWAY_SERVICE = the name of the app service in Railway (not Postgres)
+name: Deploy to Railway
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: railway-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
+    steps:
+      - name: Check configuration
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ] || [ -z "$RAILWAY_SERVICE" ]; then
+            echo "::error::Set the RAILWAY_TOKEN secret and the RAILWAY_SERVICE variable (see the comment at the top of this workflow)."
+            exit 1
+          fi
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli@5.67.1
+      - name: Deploy
+        run: railway up --service "$RAILWAY_SERVICE" --ci

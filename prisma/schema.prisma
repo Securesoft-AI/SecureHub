@@ -1,6 +1,6 @@
-// ControlForge — data model.
-// Maps §9 of the FRD. SQLite for dev; swap `provider` to postgresql for production.
-// SQLite has no native array/JSON column, so list/JSON fields are stored as JSON strings
+// SecureHub — data model.
+// Maps §9 of the FRD. PostgreSQL in dev and production.
+// List/JSON fields are stored as JSON strings (a holdover from the SQLite prototype)
 // and (de)serialized in src/lib/serialize.ts.
 
 generator client {
@@ -285,7 +285,8 @@ model Standard {
   masterDocx  String?  // base64 master DOCX (library documents imported ready-made)
   status      String   @default("draft") // draft | published
   hidden      Boolean  @default(true) // hidden from clients until surfaced
-  bundleId    String? // catalog bundle it belongs to
+  bundleId    String? // legacy single bundle; superseded by bundleIds
+  bundleIds   String   @default("[]") // JSON string[] — every catalog bundle that includes it
   priceCents  Int? // standalone price (optional)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
@@ -428,5 +429,13 @@ model AuditLog {
   entity    String
   entityId  String?
   metadata  String   @default("{}") // JSON
+  createdAt DateTime @default(now())
+}
+
+// AI-drafted hardening narratives, one per benchmark, with an organisation placeholder.
+// Buyers get a copy with their name substituted, so generation never re-calls the model.
+model NarrativeCache {
+  key       String   @id // sha256 of model + platform + benchmark + version + sections
+  json      String // Narrative JSON containing the {{ORG}} placeholder
   createdAt DateTime @default(now())
 }
